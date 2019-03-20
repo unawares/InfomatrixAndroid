@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    android:paddingTop="64dp"
+    android:paddingBottom="64dp"
+    android:paddingLeft="90dp"
+    android:paddingRight="90dp">
+
+    <ImageView
+        android:contentDescription="Infomatrix Main Logo"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo_light"
+        android:scaleType="centerInside"
+        android:layout_width="0dp"
+        android:layout_height="0dp" />
+
+</android.support.constraint.ConstraintLayout>

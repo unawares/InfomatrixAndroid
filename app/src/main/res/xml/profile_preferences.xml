@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:iconSpaceReserved="false"
+        android:inputType="text"
+        android:key="name"
+        android:title="Name" />
+
+    <EditTextPreference
+        app:iconSpaceReserved="false"
+        android:inputType="text"
+        android:key="surname"
+        android:title="Surname" />
+
+    <EditTextPreference
+        app:iconSpaceReserved="false"
+        android:inputType="textEmailAddress"
+        android:key="email"
+        android:title="Email" />
+
+    <EditTextPreference
+        app:iconSpaceReserved="false"
+        android:password="true"
+        android:inputType="textPassword"
+        android:key="password"
+        android:title="Password" />
+
+    <SwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="alert"
+        android:title="Enable Sync Alert" />
+
+    <SwitchPreference
+        app:iconSpaceReserved="false"
+        android:key="config"
+        android:title="Some config" />
+
+</PreferenceScreen>
