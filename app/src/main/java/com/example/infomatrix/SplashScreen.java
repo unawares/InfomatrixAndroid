@@ -19,7 +19,7 @@ public class SplashScreen extends Activity implements Runnable {
 
     @Override
     public void run() {
-        Intent intent = new Intent(this, ScannedBarcodeActivity.class);
+        Intent intent = new Intent(this, AuthActivity.class);
         // intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

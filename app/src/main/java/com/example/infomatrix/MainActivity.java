@@ -12,14 +12,21 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.ViewFlipper;
 
+import com.example.infomatrix.serializers.Token;
+import com.example.infomatrix.serializers.UserAuth;
+
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    BottomNavigationView bottomNavigationView;
+    private Token token;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        token = intent.getParcelableExtra("token");
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
