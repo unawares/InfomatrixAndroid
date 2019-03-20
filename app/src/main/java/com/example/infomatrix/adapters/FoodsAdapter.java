@@ -11,19 +11,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.infomatrix.R;
-import com.example.infomatrix.models.Food;
+import com.example.infomatrix.serializers.Food;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHolder> {
 
-    private ArrayList<Food> foodArrayList;
+    private List<Food> foodArrayList;
     private Context context;
 
-    public FoodsAdapter(Context context, ArrayList<Food> foodArrayList) {
+    public FoodsAdapter(Context context, List<Food> foodArrayList) {
         this.context = context;
         this.foodArrayList = foodArrayList;
     }
@@ -69,7 +70,7 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
         private void bindData(Food food)  {
 
             DateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-            Glide.with(context).load(food.getImageURL()).into(itemBackgroundImageView);
+            Glide.with(context).load(food.getFoodBackgroundImage().getImage()).into(itemBackgroundImageView);
             titleTextView.setText(food.getTitle());
             descriptionTextView.setText(food.getDescription());
             dateTextView.setText(simpleDateFormat.format(food.getDate()));

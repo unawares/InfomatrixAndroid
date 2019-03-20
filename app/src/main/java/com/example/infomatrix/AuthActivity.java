@@ -64,6 +64,7 @@ public class AuthActivity extends AppCompatActivity implements Button.OnClickLis
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
                         if (response.isSuccessful()) {
+                            NetworkService.getInstance().setToken(response.body().getToken());
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putString("email", userAuth.getEmail());
