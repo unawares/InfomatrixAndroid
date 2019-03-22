@@ -1,11 +1,14 @@
-package com.example.infomatrix.serializers;
+package com.example.infomatrix.models;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
-public class Food {
+public class Food implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -34,6 +37,10 @@ public class Food {
     @SerializedName("food_background_image")
     @Expose
     FoodBackgroundImage foodBackgroundImage;
+
+    public Food() {
+
+    }
 
     public int getId() {
         return id;
@@ -89,5 +96,44 @@ public class Food {
 
     public void setFoodBackgroundImage(FoodBackgroundImage foodBackgroundImage) {
         this.foodBackgroundImage = foodBackgroundImage;
+    }
+
+    protected Food(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        description = in.readString();
+        date = (Date) in.readSerializable();
+        created = (Date) in.readSerializable();
+        updated = (Date) in.readSerializable();
+        foodBackgroundImage = in.readParcelable(FoodBackgroundImage.class.getClassLoader());
+
+    }
+
+    public static final Creator<Food> CREATOR = new Creator<Food>() {
+        @Override
+        public Food createFromParcel(Parcel in) {
+            return new Food(in);
+        }
+
+        @Override
+        public Food[] newArray(int size) {
+            return new Food[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeSerializable(date);
+        dest.writeSerializable(created);
+        dest.writeSerializable(updated);
+        dest.writeParcelable(foodBackgroundImage, flags);
     }
 }

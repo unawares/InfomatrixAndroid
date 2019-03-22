@@ -5,6 +5,7 @@ import com.example.infomatrix.api.TokenApi;
 
 import java.io.IOException;
 
+import okhttp3.Dispatcher;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,15 +17,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkService {
 
     private static NetworkService instance;
-    private static final String BASE_URL = "http://192.168.1.8:8000/";
+    private static final String BASE_URL = "http://192.168.1.8:8080/";
     private Retrofit retrofit;
     private String token;
 
     private NetworkService() {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        System.out.println("Retrofit Created");
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
+                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addInterceptor(new Interceptor() {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
@@ -34,7 +34,8 @@ public class NetworkService {
                         }
                         return chain.proceed(builder.build());
                     }
-                });
+                })
+                .retryOnConnectionFailure(false);
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())

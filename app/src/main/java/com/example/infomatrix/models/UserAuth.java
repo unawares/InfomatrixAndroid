@@ -1,4 +1,4 @@
-package com.example.infomatrix.serializers;
+package com.example.infomatrix.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -28,4 +28,5 @@ public class UserAuth {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

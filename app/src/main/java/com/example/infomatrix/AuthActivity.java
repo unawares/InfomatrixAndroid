@@ -5,16 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.preference.EditTextPreference;
-import android.support.v7.preference.PreferenceGroup;
 import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.infomatrix.network.NetworkService;
-import com.example.infomatrix.serializers.Token;
-import com.example.infomatrix.serializers.UserAuth;
+import com.example.infomatrix.models.Token;
+import com.example.infomatrix.models.UserAuth;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,15 +61,18 @@ public class AuthActivity extends AppCompatActivity implements Button.OnClickLis
 
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
-                        if (response.isSuccessful()) {
-                            NetworkService.getInstance().setToken(response.body().getToken());
+                        Token token;
+                        if (response.isSuccessful() && (token = response.body()) != null) {
                             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                             SharedPreferences.Editor editor = preferences.edit();
+                            editor.putString("token", token.getToken());
                             editor.putString("email", userAuth.getEmail());
                             editor.putString("password", userAuth.getPassword());
                             editor.apply();
+                            NetworkService.getInstance().setToken(token.getToken());
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.putExtra("token", response.body());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
                         }
                     }

@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.infomatrix.R;
-import com.example.infomatrix.serializers.Food;
+import com.example.infomatrix.models.Food;
+import com.example.infomatrix.models.FoodBackgroundImage;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,10 +23,19 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
 
     private List<Food> foodArrayList;
     private Context context;
+    private OnFoodItemClickListener onFoodItemClickListener;
 
     public FoodsAdapter(Context context, List<Food> foodArrayList) {
         this.context = context;
         this.foodArrayList = foodArrayList;
+    }
+
+    public OnFoodItemClickListener getOnFoodItemClickListener() {
+        return onFoodItemClickListener;
+    }
+
+    public void setOnFoodItemClickListener(OnFoodItemClickListener onFoodItemClickListener) {
+        this.onFoodItemClickListener = onFoodItemClickListener;
     }
 
     @NonNull
@@ -57,6 +66,7 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
         private TextView titleTextView;
         private TextView descriptionTextView;
         private TextView dateTextView;
+        private ImageView qrCodeButton;
 
 
         private FoodViewHolder(@NonNull View itemView) {
@@ -65,16 +75,37 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
             titleTextView = itemView.findViewById(R.id.title_text_view);
             descriptionTextView = itemView.findViewById(R.id.description_text_view);
             dateTextView = itemView.findViewById(R.id.date_text_view);
+            qrCodeButton = itemView.findViewById(R.id.qr_code_button);
         }
 
-        private void bindData(Food food)  {
+        private void bindData(final Food food)  {
 
             DateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-            Glide.with(context).load(food.getFoodBackgroundImage().getImage()).into(itemBackgroundImageView);
+            FoodBackgroundImage foodBackgroundImage = food.getFoodBackgroundImage();
+            if (foodBackgroundImage != null) {
+                Glide.with(context).load(foodBackgroundImage.getImage()).into(itemBackgroundImageView);
+            }
             titleTextView.setText(food.getTitle());
             descriptionTextView.setText(food.getDescription());
             dateTextView.setText(simpleDateFormat.format(food.getDate()));
+            qrCodeButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (onFoodItemClickListener != null) {
+                        onFoodItemClickListener.onFoodItemClickListener(food);
+                    }
+                }
+
+            });
+
         }
+
+    }
+
+    public interface OnFoodItemClickListener {
+
+        void onFoodItemClickListener(Food food);
 
     }
 

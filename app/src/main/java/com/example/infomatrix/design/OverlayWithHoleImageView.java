@@ -1,17 +1,11 @@
-package com.example.infomatrix.utils;
+package com.example.infomatrix.design;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.support.v7.widget.AppCompatImageView;
-import android.util.TypedValue;
-import android.view.View;
-
-import com.example.infomatrix.R;
 
 public class OverlayWithHoleImageView extends OverlayQRScannerImageView {
 

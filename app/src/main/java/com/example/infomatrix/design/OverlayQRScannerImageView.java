@@ -1,7 +1,6 @@
-package com.example.infomatrix.utils;
+package com.example.infomatrix.design;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;

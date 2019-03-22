@@ -1,6 +1,6 @@
 package com.example.infomatrix.api;
 
-import com.example.infomatrix.serializers.Food;
+import com.example.infomatrix.models.Food;
 
 import java.util.List;
 

@@ -15,12 +15,14 @@
         android:title="Surname" />
 
     <EditTextPreference
+        android:enabled="false"
         app:iconSpaceReserved="false"
         android:inputType="textEmailAddress"
         android:key="email"
         android:title="Email" />
 
     <EditTextPreference
+        android:enabled="false"
         app:iconSpaceReserved="false"
         android:password="true"
         android:inputType="textPassword"
@@ -31,10 +33,5 @@
         app:iconSpaceReserved="false"
         android:key="alert"
         android:title="Enable Sync Alert" />
-
-    <SwitchPreference
-        app:iconSpaceReserved="false"
-        android:key="config"
-        android:title="Some config" />
 
 </PreferenceScreen>

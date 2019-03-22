@@ -1,5 +1,6 @@
 package com.example.infomatrix;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.infomatrix.adapters.FoodsAdapter;
 import com.example.infomatrix.network.NetworkService;
-import com.example.infomatrix.serializers.Food;
+import com.example.infomatrix.models.Food;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.List;
@@ -41,7 +42,10 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<List<Food>> call, Response<List<Food>> response) {
                         List<Food> foods = response.body();
-                        foodsRecyclerView.setAdapter(new FoodsAdapter(getContext(), foods));
+                        FoodsAdapter foodsAdapter = new FoodsAdapter(getContext(), foods);
+                        foodsAdapter.setOnFoodItemClickListener(onFoodItemClickListener);
+                        foodsRecyclerView.setAdapter(foodsAdapter);
+
                     }
 
                     @Override
@@ -64,4 +68,17 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
+
+    FoodsAdapter.OnFoodItemClickListener onFoodItemClickListener = new FoodsAdapter.OnFoodItemClickListener() {
+
+        @Override
+        public void onFoodItemClickListener(Food food) {
+            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
+            intent.putExtra("service", "FOOD");
+            intent.putExtra("food", food);
+            startActivity(intent);
+        }
+
+    };
+
 }
