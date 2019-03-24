@@ -195,6 +195,7 @@
                                         app:layout_constraintTop_toTopOf="parent">
 
                                         <ImageView
+                                            android:id="@+id/transportation_to_qr_code_button"
                                             android:contentDescription="QR Code"
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"
@@ -262,6 +263,7 @@
                                         app:layout_constraintTop_toTopOf="parent">
 
                                         <ImageView
+                                            android:id="@+id/transportation_from_qr_code_button"
                                             android:contentDescription="QR Code"
                                             android:layout_width="45dp"
                                             android:layout_height="45dp"

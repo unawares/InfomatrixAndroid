@@ -13,21 +13,6 @@ import com.example.infomatrix.models.User;
 public abstract class BaseServiceFragment extends Fragment {
 
     protected OnServiceActionsListener onServiceActionsListener;
-    private User user;
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_food_service, container, false);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public OnServiceActionsListener getOnServiceActionsListener() {
         return onServiceActionsListener;
@@ -56,5 +41,4 @@ public abstract class BaseServiceFragment extends Fragment {
 
     }
 
-    public abstract void serve();
 }

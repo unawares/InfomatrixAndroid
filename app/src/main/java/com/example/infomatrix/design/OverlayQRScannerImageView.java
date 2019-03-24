@@ -32,11 +32,13 @@ public abstract class OverlayQRScannerImageView extends AppCompatImageView {
     }
 
     public RectF getBoundingBox() {
+        float centerX = getWidth() / 2f;
+        float centerY = getHeight() / 2f;
         return new RectF(
-                getWidth() / 2f - width / 2f,
-                getHeight() / 2f - height / 2f,
-                getWidth() / 2f + width / 2f,
-                getHeight() / 2f + height / 2f
+                centerX - width / 2,
+                centerY - height / 2,
+                centerX + width / 2,
+                centerY + height / 2
         );
     }
 

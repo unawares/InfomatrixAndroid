@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.infomatrix.adapters.FoodsAdapter;
 import com.example.infomatrix.network.NetworkService;
@@ -26,6 +27,8 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private RecyclerView foodsRecyclerView;
+    private ImageView transportationToCampQrCodeButton;
+    private ImageView transportationFromCampQrCodeButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,14 +62,23 @@ public class HomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        transportationToCampQrCodeButton = view.findViewById(R.id.transportation_to_qr_code_button);
+        transportationFromCampQrCodeButton = view.findViewById(R.id.transportation_from_qr_code_button);
 
         foodsRecyclerView = view.findViewById(R.id.foods_recycler_view);
         foodsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         foodsRecyclerView.setHasFixedSize(true);
         new GravitySnapHelper(Gravity.START).attachToRecyclerView(foodsRecyclerView);
 
-        return view;
+        transportationToCampQrCodeButton.setOnClickListener(onTransportationClickListener);
+        transportationFromCampQrCodeButton.setOnClickListener(onTransportationClickListener);
     }
 
     FoodsAdapter.OnFoodItemClickListener onFoodItemClickListener = new FoodsAdapter.OnFoodItemClickListener() {
@@ -76,6 +88,24 @@ public class HomeFragment extends Fragment {
             Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
             intent.putExtra("service", "FOOD");
             intent.putExtra("food", food);
+            startActivity(intent);
+        }
+
+    };
+
+    View.OnClickListener onTransportationClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
+            switch (v.getId()) {
+                case R.id.transportation_to_qr_code_button:
+                    intent.putExtra("service", "TO_CAMP");
+                    break;
+                case R.id.transportation_from_qr_code_button:
+                    intent.putExtra("service", "FROM_CAMP");
+                    break;
+            }
             startActivity(intent);
         }
 

@@ -41,8 +41,6 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/image"
-                    android:visibility="invisible"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_centerHorizontal="true"
@@ -77,20 +75,11 @@
                     app:layout_constraintTop_toBottomOf="@id/full_name">
 
                     <TextView
-                        android:id="@+id/action_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Action:"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <TextView
                         android:id="@+id/action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_toRightOf="@id/action_label"
-                        tools:text="For evening food"
+                        tools:text="Transportation to the camp"
                         android:textSize="14sp" />
 
                 </RelativeLayout>
@@ -98,7 +87,6 @@
             </android.support.constraint.ConstraintLayout>
 
             <Button
-                android:visibility="invisible"
                 android:id="@+id/submit_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -28,6 +28,10 @@ public class User implements Parcelable {
     @Expose
     private String email;
 
+    @SerializedName("full_name")
+    @Expose
+    private String fullName;
+
     public User() {
 
     }
@@ -72,12 +76,21 @@ public class User implements Parcelable {
         this.email = email;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     protected User(Parcel in) {
         id = in.readInt();
         username = in.readString();
         firstName = in.readString();
         lastName = in.readString();
         email = in.readString();
+        fullName = in.readString();
     }
 
     @Override
@@ -87,6 +100,7 @@ public class User implements Parcelable {
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(email);
+        dest.writeString(fullName);
     }
 
     @Override
