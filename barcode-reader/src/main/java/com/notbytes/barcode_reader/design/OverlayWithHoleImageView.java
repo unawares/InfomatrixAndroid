@@ -1,4 +1,4 @@
-package com.example.infomatrix.design;
+package com.notbytes.barcode_reader.design;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -85,10 +85,10 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onFoodItemClickListener(Food food) {
-            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
-            intent.putExtra("service", "FOOD");
-            intent.putExtra("food", food);
-            startActivity(intent);
+//            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
+//            intent.putExtra("service", "FOOD");
+//            intent.putExtra("food", food);
+//            startActivity(intent);
         }
 
     };
@@ -97,16 +97,16 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
-            switch (v.getId()) {
-                case R.id.transportation_to_qr_code_button:
-                    intent.putExtra("service", "TO_CAMP");
-                    break;
-                case R.id.transportation_from_qr_code_button:
-                    intent.putExtra("service", "FROM_CAMP");
-                    break;
-            }
-            startActivity(intent);
+//            Intent intent = new Intent(getContext(), ScannedBarcodeActivity.class);
+//            switch (v.getId()) {
+//                case R.id.transportation_to_qr_code_button:
+//                    intent.putExtra("service", "TO_CAMP");
+//                    break;
+//                case R.id.transportation_from_qr_code_button:
+//                    intent.putExtra("service", "FROM_CAMP");
+//                    break;
+//            }
+//            startActivity(intent);
         }
 
     };

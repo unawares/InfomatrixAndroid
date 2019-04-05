@@ -3,9 +3,11 @@ package com.example.infomatrix;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,15 +15,17 @@ import android.widget.TextView;
 import com.example.infomatrix.models.Food;
 import com.example.infomatrix.models.FoodService;
 import com.example.infomatrix.models.Service;
+import com.example.infomatrix.models.Services;
 import com.example.infomatrix.models.User;
 import com.example.infomatrix.models.UserCode;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class FoodServiceFragment extends BaseServiceFragment implements Button.OnClickListener {
 
-    private UserCode userCode;
+    private CardView box;
     private Food food;
     private TextView fullName;
     private TextView action;
@@ -41,39 +45,32 @@ public class FoodServiceFragment extends BaseServiceFragment implements Button.O
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            userCode = bundle.getParcelable("user_code");
             food = bundle.getParcelable("food");
         }
 
+        box = view.findViewById(R.id.box);
         fullName = view.findViewById(R.id.full_name);
         action = view.findViewById(R.id.action);
         submitButton = view.findViewById(R.id.submit_button);
         cancelButton = view.findViewById(R.id.cancel_button);
         image = view.findViewById(R.id.image);
 
-        fullName.setText(String.format("%s %s", userCode.getUser().getFirstName(), userCode.getUser().getLastName()));
         action.setText(String.format("For %s", food.getTitle()));
 
         submitButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
-
-        if (canMakeService()) {
-            image.setVisibility(ImageView.VISIBLE);
-            submitButton.setVisibility(Button.VISIBLE);
-        }
     }
 
-    private boolean canMakeService() {
-        List<? extends Service> services = userCode.getServices().get("foods");
-        for (Service service : services) {
-            FoodService foodService = (FoodService) service;
-//            if (food.getId() == foodService.getFood() && foodService.isActive()) {
-//                if (foodService.getAmount() < foodService.getOrders().size()) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            }
+    private boolean canMakeService(UserCode userCode) {
+        Services services = userCode.getServices();
+        for (FoodService foodService : services.getFoods()) {
+            if (food.getId() == foodService.getFood() && foodService.isActive()) {
+                if (foodService.getAmount() > foodService.getOrders().size()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
         return false;
     }
@@ -88,5 +85,53 @@ public class FoodServiceFragment extends BaseServiceFragment implements Button.O
                 cancel();
                 break;
         }
+    }
+
+    @Override
+    public void show() {
+        box.animate()
+                .alpha(1)
+                .scaleX(1)
+                .scaleY(1)
+                .setDuration(50)
+                .setInterpolator(new DecelerateInterpolator())
+                .withStartAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        box.setVisibility(CardView.VISIBLE);
+                    }
+                });
+    }
+
+    @Override
+    public void hide() {
+        box.animate()
+                .alpha(0)
+                .scaleX(0)
+                .scaleY(0)
+                .setDuration(50)
+                .setInterpolator(new DecelerateInterpolator())
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        box.setVisibility(CardView.GONE);
+                    }
+                });
+    }
+
+    @Override
+    public void serve() throws BaseServiceFragment.UserCodeIsNotSetException {
+        super.serve();
+        UserCode userCode = getUserCode();
+        fullName.setText(userCode.getUser().getFullName());
+        if (canMakeService(userCode)) {
+            image.setVisibility(ImageView.VISIBLE);
+            submitButton.setVisibility(Button.VISIBLE);
+        }
+    }
+
+    @Override
+    public void close() {
+        super.close();
     }
 }

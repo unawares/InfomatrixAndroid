@@ -1,4 +1,4 @@
-package com.example.infomatrix.design;
+package com.notbytes.barcode_reader.design;
 
 import android.content.Context;
 import android.graphics.RectF;
@@ -6,6 +6,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+
+import com.notbytes.barcode_reader.camera.GraphicOverlay;
 
 public abstract class OverlayQRScannerImageView extends AppCompatImageView {
 

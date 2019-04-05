@@ -9,8 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.infomatrix.models.User;
+import com.example.infomatrix.models.UserCode;
 
 public abstract class BaseServiceFragment extends Fragment {
+
+    public class UserCodeIsNotSetException extends Exception {}
+
+    private UserCode userCode;
 
     protected OnServiceActionsListener onServiceActionsListener;
 
@@ -41,4 +46,25 @@ public abstract class BaseServiceFragment extends Fragment {
 
     }
 
+    public void serve() throws UserCodeIsNotSetException {
+        if (userCode == null) {
+            throw new UserCodeIsNotSetException();
+        }
+    }
+
+    public void close() {
+
+    }
+
+    public UserCode getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(UserCode userCode) {
+        this.userCode = userCode;
+    }
+
+    public abstract void show();
+
+    public abstract void hide();
 }

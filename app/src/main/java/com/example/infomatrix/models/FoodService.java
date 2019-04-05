@@ -29,7 +29,7 @@ public class FoodService extends Service implements Parcelable {
 
     protected FoodService(Parcel in) {
         super(in);
-        in.readTypedList(orders, FoodServiceOrder.CREATOR);
+        orders = in.createTypedArrayList(FoodServiceOrder.CREATOR);
         amount = in.readInt();
         food = in.readInt();
     }

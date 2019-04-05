@@ -34,7 +34,7 @@
             android:name=".AuthActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ScannedBarcodeActivity"
+            android:name=".BarcodeScannerActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="com.google.android.gms.vision.DEPENDENCIES"

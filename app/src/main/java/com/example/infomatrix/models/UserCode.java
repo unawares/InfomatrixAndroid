@@ -24,7 +24,7 @@ public class UserCode implements Parcelable {
 
     @SerializedName("services")
     @Expose
-    private Map<String, List<? extends Service>> services;
+    private Services services;
 
     @SerializedName("code")
     @Expose
@@ -48,7 +48,7 @@ public class UserCode implements Parcelable {
     protected UserCode(Parcel in) {
         id = in.readInt();
         user = in.readParcelable(user.getClass().getClassLoader());
-        in.readMap(services, services.getClass().getClassLoader());
+        services = in.readParcelable(services.getClass().getClassLoader());
         code = in.readString();
         active = in.readByte() != 0;
         created = (Date) in.readSerializable();
@@ -59,7 +59,7 @@ public class UserCode implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeParcelable(user, flags);
-        dest.writeMap(services);
+        dest.writeParcelable(services, flags);
         dest.writeString(code);
         dest.writeByte((byte) (active ? 1 : 0));
         dest.writeSerializable(created);
@@ -131,12 +131,11 @@ public class UserCode implements Parcelable {
         this.active = active;
     }
 
-    public Map<String, List<? extends Service>> getServices() {
+    public Services getServices() {
         return services;
     }
 
-    public void setServices(Map<String, List<? extends Service>> services) {
+    public void setServices(Services services) {
         this.services = services;
     }
-
 }
