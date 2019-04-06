@@ -263,7 +263,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
         // is set to receive the barcode detection results, track the barcodes, and maintain
         // graphics for each barcode on screen.  The factory is used by the multi-processor to
         // create a separate tracker instance for each barcode.
-        final BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
+        final BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build();
         BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mOverlayFocusImageView, mGraphicOverlay, this);
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());

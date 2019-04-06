@@ -16,39 +16,7 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
 
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//        String tokenStr = preferences.getString("token", null);
-//        if (tokenStr != null) {
-//            Token token = new Token();
-//            token.setToken(tokenStr);
-//            token.setToken(tokenStr);
-//            NetworkService.getInstance()
-//                    .getTokenApi()
-//                    .verifyToken(token)
-//                    .enqueue(new Callback<Token>() {
-//
-//                        @Override
-//                        public void onResponse(Call<Token> call, Response<Token> response) {
-//                            if (response.isSuccessful()) {
-//                                toMainActivity();
-//                            } else {
-//                                toAuthActivity();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Token> call, Throwable t) {
-//                            toAuthActivity();
-//                        }
-//
-//                    });
-//        } else {
-//            toAuthActivity();
-//        }
-
-        // DEBUG
-        startActivity(new Intent(this, BarcodeScannerActivity.class));
-
+        toAuthActivity();
     }
 
     private void toActivity(final Intent intent) {

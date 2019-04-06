@@ -54,35 +54,9 @@ public class AuthActivity extends AppCompatActivity implements Button.OnClickLis
         userAuth.setEmail(email.getText().toString().trim());
         userAuth.setPassword(password.getText().toString().trim());
 
-        NetworkService.getInstance()
-                .getTokenApi()
-                .obtainToken(userAuth)
-                .enqueue(new Callback<Token>() {
-
-                    @Override
-                    public void onResponse(Call<Token> call, Response<Token> response) {
-                        Token token;
-                        if (response.isSuccessful() && (token = response.body()) != null) {
-                            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("token", token.getToken());
-                            editor.putString("email", userAuth.getEmail());
-                            editor.putString("password", userAuth.getPassword());
-                            editor.apply();
-                            NetworkService.getInstance().setToken(token.getToken());
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Token> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-
-                });
-
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
