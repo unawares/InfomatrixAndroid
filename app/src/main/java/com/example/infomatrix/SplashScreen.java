@@ -2,10 +2,14 @@ package com.example.infomatrix;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v7.preference.PreferenceManager;
+
+import com.example.infomatrix.network2.NetworkService;
 
 public class SplashScreen extends Activity {
 
@@ -15,8 +19,15 @@ public class SplashScreen extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-
-        toAuthActivity();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        if (sharedPreferences.contains("token")) {
+            NetworkService
+                    .getInstance()
+                    .setToken(sharedPreferences.getString("token", ""));
+            toMainActivity();
+        } else {
+            toAuthActivity();
+        }
     }
 
     private void toActivity(final Intent intent) {

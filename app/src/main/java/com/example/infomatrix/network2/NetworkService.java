@@ -1,11 +1,11 @@
-package com.example.infomatrix.network;
+package com.example.infomatrix.network2;
 
-import com.example.infomatrix.api.FoodApi;
-import com.example.infomatrix.api.TokenApi;
+import com.example.infomatrix.api2.AuthApi;
+import com.example.infomatrix.api2.LogsApi;
+import com.example.infomatrix.api2.UsersApi;
 
 import java.io.IOException;
 
-import okhttp3.Dispatcher;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,8 +16,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
 
+    private static final String AUTHORIZATION = "Bearer";
+
     private static NetworkService instance;
-    private static final String BASE_URL = "http://192.168.43.29:8080/";
+    private static final String BASE_URL = "http://infomatrix.asia";
     private Retrofit retrofit;
     private String token;
 
@@ -28,8 +30,8 @@ public class NetworkService {
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         Request.Builder builder = chain.request().newBuilder();
-                        if (token != null) {
-                            builder.addHeader("Authorization", token);
+                        if (token != null && !token.isEmpty()) {
+                            builder.addHeader("Authorization", AUTHORIZATION + " " + token);
                         }
                         return chain.proceed(builder.build());
                     }
@@ -53,12 +55,16 @@ public class NetworkService {
         this.token = token;
     }
 
-    public TokenApi getTokenApi() {
-        return retrofit.create(TokenApi.class);
+    public AuthApi getAuthApi() {
+        return retrofit.create(AuthApi.class);
     }
 
-    public FoodApi getFoodApi() {
-        return retrofit.create(FoodApi.class);
+    public UsersApi getUsersApi() {
+        return retrofit.create(UsersApi.class);
+    }
+
+    public LogsApi getLogsApi() {
+        return retrofit.create(LogsApi.class);
     }
 
 }

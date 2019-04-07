@@ -9,15 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.infomatrix.R;
-import com.example.infomatrix.models.Food;
-import com.example.infomatrix.models.FoodBackgroundImage;
+import com.example.infomatrix.models2.Food;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHolder> {
 
@@ -65,7 +60,6 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
         private ImageView itemBackgroundImageView;
         private TextView titleTextView;
         private TextView descriptionTextView;
-        private TextView dateTextView;
         private ImageView qrCodeButton;
 
 
@@ -74,20 +68,12 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
             itemBackgroundImageView = itemView.findViewById(R.id.item_background_image_view);
             titleTextView = itemView.findViewById(R.id.title_text_view);
             descriptionTextView = itemView.findViewById(R.id.description_text_view);
-            dateTextView = itemView.findViewById(R.id.date_text_view);
             qrCodeButton = itemView.findViewById(R.id.qr_code_button);
         }
 
         private void bindData(final Food food)  {
-
-            DateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-            FoodBackgroundImage foodBackgroundImage = food.getFoodBackgroundImage();
-            if (foodBackgroundImage != null) {
-                Glide.with(context).load(foodBackgroundImage.getImage()).into(itemBackgroundImageView);
-            }
             titleTextView.setText(food.getTitle());
             descriptionTextView.setText(food.getDescription());
-            dateTextView.setText(simpleDateFormat.format(food.getDate()));
             qrCodeButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override

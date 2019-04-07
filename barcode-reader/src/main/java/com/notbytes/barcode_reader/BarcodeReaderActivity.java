@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseArray;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.gms.vision.barcode.Barcode;
 
@@ -38,6 +40,8 @@ public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeR
     private BarcodeReaderFragment mBarcodeReaderFragment;
     private BaseFragment mServiceFragment;
 
+    private ImageView cancelImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,14 @@ public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeR
         }
         mBarcodeReaderFragment = attachBarcodeReaderFragment();
         mServiceFragment = attachServiceFragment();
+        cancelImageView = findViewById(R.id.cancel_image_view);
+
+        cancelImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -127,6 +139,12 @@ public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeR
     @Override
     public void onCameraPermissionDenied() {
         setResult(RESULT_ERROR);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 

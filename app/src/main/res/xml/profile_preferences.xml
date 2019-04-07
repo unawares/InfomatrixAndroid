@@ -3,18 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <EditTextPreference
-        app:iconSpaceReserved="false"
-        android:inputType="text"
-        android:key="name"
-        android:title="Name" />
-
-    <EditTextPreference
-        app:iconSpaceReserved="false"
-        android:inputType="text"
-        android:key="surname"
-        android:title="Surname" />
-
-    <EditTextPreference
         android:enabled="false"
         app:iconSpaceReserved="false"
         android:inputType="textEmailAddress"
@@ -28,10 +16,5 @@
         android:inputType="textPassword"
         android:key="password"
         android:title="Password" />
-
-    <SwitchPreference
-        app:iconSpaceReserved="false"
-        android:key="alert"
-        android:title="Enable Sync Alert" />
 
 </PreferenceScreen>

@@ -81,6 +81,11 @@
 
                 </android.support.constraint.ConstraintLayout>
 
+                <View
+                    android:id="@+id/synchronization_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
             </android.support.constraint.ConstraintLayout>
 
             <android.support.constraint.ConstraintLayout

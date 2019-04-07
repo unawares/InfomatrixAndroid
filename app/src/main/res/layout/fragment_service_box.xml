@@ -58,11 +58,12 @@
                 android:gravity="center_horizontal">
 
                 <TextView
+                    android:textAlignment="center"
                     android:id="@+id/full_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#4886FF"
-                    android:textSize="26sp"
+                    android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -70,7 +71,9 @@
                     tools:text="Name Surname" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="@id/full_name"
                     app:layout_constraintRight_toRightOf="@id/full_name"
