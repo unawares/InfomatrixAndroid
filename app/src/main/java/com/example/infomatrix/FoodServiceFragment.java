@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infomatrix.backend.UsersBackend;
+import com.example.infomatrix.database.DBManager;
 import com.example.infomatrix.models.Food;
 import com.example.infomatrix.models.MessagedResponse;
 import com.example.infomatrix.models.ServiceLog;
@@ -152,66 +153,77 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
         pause();
         User user = UsersBackend.getInstance().getUser(barcode.displayValue);
         if (user != null) {
-            ServiceLog serviceLog = new ServiceLog();
-            serviceLog.setUuid(UUID.randomUUID().toString().replace("-", ""));
-            serviceLog.setCode(user.getCode());
-            System.out.println(food);
-            switch (food.getFoodType()) {
-                case BREAKFAST:
-                    serviceLog.setComment("Breakfast done by " + user.getFullName());
-                    serviceLog.setAction(ServiceLog.Action.BREAKFAST);
-                    break;
-                case LUNCH:
-                    serviceLog.setComment("Lunch done by " + user.getFullName());
-                    serviceLog.setAction(ServiceLog.Action.LUNCH);
-                    break;
-                case DINNER:
-                    serviceLog.setComment("Dinner done by " + user.getFullName());
-                    serviceLog.setAction(ServiceLog.Action.DINNER);
-                    break;
+            if (user.isFood()) {
+                final ServiceLog serviceLog = new ServiceLog();
+                serviceLog.setUuid(UUID.randomUUID().toString().replace("-", ""));
+                serviceLog.setCode(user.getCode());
+                System.out.println(food);
+                switch (food.getFoodType()) {
+                    case BREAKFAST:
+                        serviceLog.setComment("Breakfast done by " + user.getFullName());
+                        serviceLog.setAction(ServiceLog.Action.BREAKFAST);
+                        break;
+                    case LUNCH:
+                        serviceLog.setComment("Lunch done by " + user.getFullName());
+                        serviceLog.setAction(ServiceLog.Action.LUNCH);
+                        break;
+                    case DINNER:
+                        serviceLog.setComment("Dinner done by " + user.getFullName());
+                        serviceLog.setAction(ServiceLog.Action.DINNER);
+                        break;
+                }
+                final FoodServiceFragment.FoodServiceBoxFragment foodServiceBoxFragment = new FoodServiceFragment.FoodServiceBoxFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user_body", user);
+                bundle.putParcelable("logs_body", serviceLog);
+                foodServiceBoxFragment.setArguments(bundle);
+
+                foodServiceBoxFragment.setActionsListener(new FoodServiceBoxFragment.ActionsListener() {
+
+                    @Override
+                    public void onSubmit() {
+                        DBManager
+                                .getInstance()
+                                .insertHistoryLog(
+                                        serviceLog.getUuid(),
+                                        serviceLog.getCode(),
+                                        serviceLog.getAction().name(),
+                                        serviceLog.getComment());
+                        FragmentManager fragmentManager = getChildFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.remove(foodServiceBoxFragment);
+                        fragmentTransaction.runOnCommit(new Runnable() {
+                            @Override
+                            public void run() {
+                                resume();
+                            }
+                        });
+                        fragmentTransaction.commit();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        FragmentManager fragmentManager = getChildFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.remove(foodServiceBoxFragment);
+                        fragmentTransaction.runOnCommit(new Runnable() {
+                            @Override
+                            public void run() {
+                                resume();
+                            }
+                        });
+                        fragmentTransaction.commit();
+                    }
+
+                });
+
+                FragmentManager fragmentManager = getChildFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
+                fragmentTransaction.commit();
+            } else {
+                Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();
             }
-            final FoodServiceFragment.FoodServiceBoxFragment foodServiceBoxFragment = new FoodServiceFragment.FoodServiceBoxFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("user_body", user);
-            bundle.putParcelable("logs_body", serviceLog);
-            foodServiceBoxFragment.setArguments(bundle);
-
-            foodServiceBoxFragment.setActionsListener(new FoodServiceBoxFragment.ActionsListener() {
-
-                @Override
-                public void onSubmit() {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.remove(foodServiceBoxFragment);
-                    fragmentTransaction.runOnCommit(new Runnable() {
-                        @Override
-                        public void run() {
-                            resume();
-                        }
-                    });
-                    fragmentTransaction.commit();
-                }
-
-                @Override
-                public void onCancel() {
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.remove(foodServiceBoxFragment);
-                    fragmentTransaction.runOnCommit(new Runnable() {
-                        @Override
-                        public void run() {
-                            resume();
-                        }
-                    });
-                    fragmentTransaction.commit();
-                }
-
-            });
-
-            FragmentManager fragmentManager = getChildFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
-            fragmentTransaction.commit();
         } else  {
             Toast.makeText(getContext(), "Invalid QR code", Toast.LENGTH_SHORT).show();
             resume();

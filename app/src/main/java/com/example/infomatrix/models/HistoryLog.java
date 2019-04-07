@@ -2,29 +2,26 @@ package com.example.infomatrix.models;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 
-public class Logs extends RealmObject {
+public class HistoryLog extends RealmObject {
 
     @PrimaryKey
-    private Integer id;
-    private String username;
+    private String uuid;
+    private String code;
     private String action;
     private String comment;
 
-    public Integer getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getCode() {
+        return code;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getAction() {
@@ -42,5 +39,4 @@ public class Logs extends RealmObject {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
 }

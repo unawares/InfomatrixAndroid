@@ -3,7 +3,10 @@ package com.example.infomatrix.database;
 import android.content.Context;
 import android.support.annotation.Nullable;
 
-import com.example.infomatrix.models.Logs;
+import com.example.infomatrix.models.HistoryLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -11,68 +14,52 @@ import io.realm.RealmResults;
 
 public class DBManager {
 
-    Context context;
-    Realm realm = null;
-    Logs logs = null;
+    private static DBManager instance;
 
-    public DBManager(Context context) {
-        this.context = context;
+    private Realm realm;
+    private HistoryLog historyLog;
+
+    private DBManager() {
+        realm = Realm.getDefaultInstance();
     }
 
-    /**
-     * Create an instance of Realm database
-     */
-    public void createDBInstance() {
-        Realm.init(context);
-        realm = Realm.getDefaultInstance();
+    public static DBManager getInstance() {
+        if (instance == null) {
+            return new DBManager();
+        }
+        return instance;
     }
 
     /**
      * Inserting data to the Realm database
-     * @param id - auto generated id
-     * @param username - user's fullname
+     * @param uuid - auto generated uuid
+     * @param code - user's code
      * @param action - action code
      * @param comment - any comments
      */
-    public void insertLogsToDB(Integer id, String username, String action, String comment) {
+    public void insertHistoryLog(String uuid, String code, String action, String comment) {
         realm.beginTransaction();
-        logs = realm.createObject(Logs.class);
-        logs.setId(id);
-        logs.setUsername(username);
-        logs.setAction(action);
-        logs.setComment(comment);
+        historyLog = realm.createObject(HistoryLog.class, uuid);
+        historyLog.setCode(code);
+        historyLog.setAction(action);
+        historyLog.setComment(comment);
         realm.commitTransaction();
     }
 
     /**
-     * Fetch all logs from the Realm database
-     * @return all logs
+     * Fetch all historyLog from the Realm database
+     * @return all historyLog
      */
-    public Logs[] getAllLogsFromDB(@Nullable String username) {
-        RealmQuery<Logs> query = realm.where(Logs.class);
-
-        // Add query conditions, if you need
-        query.equalTo("name", "John");
-        query.or().equalTo("name", "Peter");
-
-        // Execute the query
-        RealmResults<Logs> result1 = query.findAll();
-
-        // Or alternatively do the same all at once (the "Fluent interface")
-        result1 = realm.where(Logs.class)
-                .equalTo("name", "John")
-                .or()
-                .equalTo("name", "Peter")
-                .findAll();
-
-        return (Logs[]) result1.toArray();
+    public List<HistoryLog> getAllHistoryLogs() {
+        RealmQuery<HistoryLog> query = realm.where(HistoryLog.class);
+        return query.findAll();
     }
 
     /**
-     * Delete all data from database, it should be called after successful uploading logs to the server
+     * Delete all data from database, it should be called after successful uploading historyLog to the server
      */
-    public void deleteLogsAfterUploadToServer() {
-        final RealmResults<Logs> result = realm.where(Logs.class).findAll();
+    public void deleteHistoryLogsAfterUploadToServer() {
+        final RealmResults<HistoryLog> result = realm.where(HistoryLog.class).findAll();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

@@ -11,8 +11,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.infomatrix.backend.UsersBackend;
+import com.example.infomatrix.database.DBManager;
+import com.example.infomatrix.models.HistoryLog;
 import com.example.infomatrix.models.Users;
 import com.example.infomatrix.network.NetworkService;
+
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println(historyLogs);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation_view);
 
