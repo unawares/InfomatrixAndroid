@@ -5,5 +5,7 @@
     <string name="tab_students">Students</string>
     <string name="tab_supervisors">Supervisors</string>
     <string name="action_settings">Settings</string>
+    <string name="title_students_history">Students history</string>
+    <string name="title_supervisors_history">Supervisors history</string>
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>
