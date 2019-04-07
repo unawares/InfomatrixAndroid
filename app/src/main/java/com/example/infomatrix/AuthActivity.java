@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.infomatrix.models2.UserAuthRequestBody;
-import com.example.infomatrix.models2.UserAuthResponse;
-import com.example.infomatrix.network2.NetworkService;
+import com.example.infomatrix.models.UserAuthRequestBody;
+import com.example.infomatrix.models.UserAuthResponse;
+import com.example.infomatrix.network.NetworkService;
 
 import retrofit2.Call;
 import retrofit2.Callback;

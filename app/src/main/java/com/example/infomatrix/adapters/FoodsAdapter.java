@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.infomatrix.R;
-import com.example.infomatrix.models2.Food;
+import com.example.infomatrix.models.Food;
 
 import java.util.List;
 

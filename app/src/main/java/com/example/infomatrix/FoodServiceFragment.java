@@ -10,16 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.infomatrix.backend.UsersBackend;
-import com.example.infomatrix.models2.Food;
-import com.example.infomatrix.models2.MessagedResponse;
-import com.example.infomatrix.models2.ServiceLog;
-import com.example.infomatrix.models2.User;
-import com.example.infomatrix.network2.NetworkService;
+import com.example.infomatrix.models.Food;
+import com.example.infomatrix.models.MessagedResponse;
+import com.example.infomatrix.models.ServiceLog;
+import com.example.infomatrix.models.User;
+import com.example.infomatrix.network.NetworkService;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.notbytes.barcode_reader.BarcodeReaderActivity;
 

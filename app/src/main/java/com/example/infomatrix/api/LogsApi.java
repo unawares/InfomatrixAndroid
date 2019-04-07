@@ -1,7 +1,7 @@
-package com.example.infomatrix.api2;
+package com.example.infomatrix.api;
 
-import com.example.infomatrix.models2.ServiceLog;
-import com.example.infomatrix.models2.MessagedResponse;
+import com.example.infomatrix.models.ServiceLog;
+import com.example.infomatrix.models.MessagedResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

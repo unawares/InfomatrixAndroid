@@ -9,7 +9,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 
-import com.example.infomatrix.network2.NetworkService;
+import com.example.infomatrix.network.NetworkService;
 
 public class SplashScreen extends Activity {
 

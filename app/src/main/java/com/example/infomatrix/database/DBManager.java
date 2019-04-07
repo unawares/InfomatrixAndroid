@@ -5,9 +5,6 @@ import android.support.annotation.Nullable;
 
 import com.example.infomatrix.models.Logs;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;

@@ -1,11 +1,10 @@
 package com.example.infomatrix.models;
 
-import java.text.SimpleDateFormat;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 public class Logs extends RealmObject {
+
     @PrimaryKey
     private Integer id;
     private String username;
@@ -43,4 +42,5 @@ public class Logs extends RealmObject {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
 }

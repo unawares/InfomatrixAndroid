@@ -1,7 +1,7 @@
-package com.example.infomatrix.api2;
+package com.example.infomatrix.api;
 
-import com.example.infomatrix.models2.UserAuthRequestBody;
-import com.example.infomatrix.models2.UserAuthResponse;
+import com.example.infomatrix.models.UserAuthRequestBody;
+import com.example.infomatrix.models.UserAuthResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

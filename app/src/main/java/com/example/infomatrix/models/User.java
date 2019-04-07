@@ -8,72 +8,68 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Parcelable {
 
-    @SerializedName("id")
-    @Expose
-    private int id;
+    public enum Role {
 
-    @SerializedName("username")
-    @Expose
-    private String username;
+        @SerializedName("1")
+        ADMIN(1),
+        @SerializedName("2")
+        VOLUNTEER(2),
+        @SerializedName("3")
+        SUPERVISOR(3),
+        @SerializedName("4")
+        STUDENT(4),
+        @SerializedName("5")
+        GUEST(5);
 
-    @SerializedName("first_name")
-    @Expose
-    private String firstName;
+        public static Role get(int identifier) {
+            switch (identifier) {
+                case 1: return ADMIN;
+                case 2: return VOLUNTEER;
+                case 3: return SUPERVISOR;
+                case 4: return STUDENT;
+                case 5: return GUEST;
+                default: return null;
+            }
+        }
 
-    @SerializedName("last_name")
-    @Expose
-    private String lastName;
+        private int identifier;
 
-    @SerializedName("email")
-    @Expose
-    private String email;
+        Role(int identifier) {
+            this.identifier = identifier;
+        }
 
-    @SerializedName("full_name")
+        public int getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(int identifier) {
+            this.identifier = identifier;
+        }
+
+    }
+
+    @SerializedName("fullname")
     @Expose
     private String fullName;
 
+    @SerializedName("code")
+    @Expose
+    private String code;
+
+    @SerializedName("role")
+    @Expose
+    private Role role;
+
+    @SerializedName("is_food")
+    @Expose
+    private boolean isFood;
+
+    @SerializedName("is_transport")
+    @Expose
+    private boolean isTransport;
+
     public User() {
 
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getFullName() {
@@ -84,23 +80,53 @@ public class User implements Parcelable {
         this.fullName = fullName;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public boolean isFood() {
+        return isFood;
+    }
+
+    public void setFood(boolean food) {
+        isFood = food;
+    }
+
+    public boolean isTransport() {
+        return isTransport;
+    }
+
+    public void setTransport(boolean transport) {
+        isTransport = transport;
+    }
+
     protected User(Parcel in) {
-        id = in.readInt();
-        username = in.readString();
-        firstName = in.readString();
-        lastName = in.readString();
-        email = in.readString();
         fullName = in.readString();
+        code = in.readString();
+        role = Role.get(in.readInt());
+        isFood = in.readByte() != 0;
+        isTransport = in.readByte() != 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(username);
-        dest.writeString(firstName);
-        dest.writeString(lastName);
-        dest.writeString(email);
         dest.writeString(fullName);
+        dest.writeString(code);
+        dest.writeInt(role.getIdentifier());
+        dest.writeByte((byte) (isFood ? 1 : 0));
+        dest.writeByte((byte) (isTransport ? 1 : 0));
     }
 
     @Override
@@ -119,5 +145,4 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
 }

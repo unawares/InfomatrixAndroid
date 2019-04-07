@@ -2,10 +2,8 @@ package com.example.infomatrix;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +16,13 @@ import android.widget.Toast;
 
 import com.example.infomatrix.adapters.FoodsAdapter;
 import com.example.infomatrix.backend.UsersBackend;
-import com.example.infomatrix.models2.Food;
-import com.example.infomatrix.models2.Users;
-import com.example.infomatrix.network2.NetworkService;
+import com.example.infomatrix.models.Food;
+import com.example.infomatrix.models.Users;
+import com.example.infomatrix.network.NetworkService;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.notbytes.barcode_reader.BarcodeReaderActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;

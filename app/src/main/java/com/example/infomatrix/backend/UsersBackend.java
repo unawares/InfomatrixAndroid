@@ -1,6 +1,6 @@
 package com.example.infomatrix.backend;
 
-import com.example.infomatrix.models2.User;
+import com.example.infomatrix.models.User;
 
 import java.util.HashMap;
 import java.util.List;

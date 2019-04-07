@@ -1,6 +1,6 @@
-package com.example.infomatrix.api2;
+package com.example.infomatrix.api;
 
-import com.example.infomatrix.models2.Users;
+import com.example.infomatrix.models.Users;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

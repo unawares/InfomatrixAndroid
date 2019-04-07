@@ -1,4 +1,4 @@
-package com.example.infomatrix.models2;
+package com.example.infomatrix.models;
 
 import android.os.Parcel;
 

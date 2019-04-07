@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.infomatrix.backend.UsersBackend;
-import com.example.infomatrix.models2.Users;
-import com.example.infomatrix.network2.NetworkService;
+import com.example.infomatrix.models.Users;
+import com.example.infomatrix.network.NetworkService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
