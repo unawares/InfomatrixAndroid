@@ -15,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.infomatrix.adapters.FoodsAdapter;
-import com.example.infomatrix.backend.UsersBackend;
+import com.example.infomatrix.database.DBManager;
 import com.example.infomatrix.models.Food;
+import com.example.infomatrix.models.User;
+import com.example.infomatrix.models.UserRealmObject;
 import com.example.infomatrix.models.Users;
 import com.example.infomatrix.network.NetworkService;
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
@@ -109,9 +111,19 @@ public class HomeFragment extends Fragment {
                                 if (response.isSuccessful()) {
                                     Users users = response.body();
                                     if (users.isSuccess()) {
-                                        UsersBackend
+                                        List<UserRealmObject> userRealmObjects = new ArrayList<>();
+                                        for (User user : users.getUsers()) {
+                                            UserRealmObject userRealmObject = new UserRealmObject();
+                                            userRealmObject.setCode(user.getCode());
+                                            userRealmObject.setFullName(user.getFullName());
+                                            userRealmObject.setRole(user.getRole().getIdentifier());
+                                            userRealmObject.setFood(user.isFood());
+                                            userRealmObject.setTransport(user.isFood());
+                                            userRealmObjects.add(userRealmObject);
+                                        }
+                                        DBManager
                                                 .getInstance()
-                                                .setUsers(users.getUsers());
+                                                .updateUsers(userRealmObjects);
                                         Toast.makeText(getContext(), "Users has been synchronized", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(getContext(), "Internal Error", Toast.LENGTH_SHORT).show();

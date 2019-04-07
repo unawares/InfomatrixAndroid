@@ -2,8 +2,6 @@ package com.example.infomatrix;
 
 import android.app.Application;
 
-import com.example.infomatrix.models.HistoryLog;
-
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

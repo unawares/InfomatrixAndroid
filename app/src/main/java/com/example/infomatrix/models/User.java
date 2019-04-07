@@ -42,8 +42,15 @@ public class User implements Parcelable {
             return identifier;
         }
 
-        public void setIdentifier(int identifier) {
-            this.identifier = identifier;
+        public String toDisplayString() {
+            switch (this) {
+                case ADMIN: return "Admin";
+                case VOLUNTEER: return "Volunteer";
+                case SUPERVISOR: return "Supervisor";
+                case STUDENT: return "Student";
+                case GUEST: return "Guest";
+                default: return "";
+            }
         }
 
     }

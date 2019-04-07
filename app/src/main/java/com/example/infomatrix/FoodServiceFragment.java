@@ -13,16 +13,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.infomatrix.backend.UsersBackend;
 import com.example.infomatrix.database.DBManager;
 import com.example.infomatrix.models.Food;
 import com.example.infomatrix.models.MessagedResponse;
 import com.example.infomatrix.models.ServiceLog;
 import com.example.infomatrix.models.User;
+import com.example.infomatrix.models.UserRealmObject;
 import com.example.infomatrix.network.NetworkService;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.notbytes.barcode_reader.BarcodeReaderActivity;
 
+import java.util.Date;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -151,8 +152,14 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
     @Override
     protected void onScanned(Barcode barcode) {
         pause();
-        User user = UsersBackend.getInstance().getUser(barcode.displayValue);
-        if (user != null) {
+        final UserRealmObject userRealmObject = DBManager.getInstance().getUser(barcode.displayValue);
+        if (userRealmObject != null) {
+            final User user = new User();
+            user.setCode(userRealmObject.getCode());
+            user.setFullName(userRealmObject.getFullName());
+            user.setRole(User.Role.get(userRealmObject.getRole()));
+            user.setFood(userRealmObject.isFood());
+            user.setTransport(userRealmObject.isTransport());
             if (user.isFood()) {
                 final ServiceLog serviceLog = new ServiceLog();
                 serviceLog.setUuid(UUID.randomUUID().toString().replace("-", ""));
@@ -186,9 +193,9 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                                 .getInstance()
                                 .insertHistoryLog(
                                         serviceLog.getUuid(),
-                                        serviceLog.getCode(),
+                                        user.getFullName(),
                                         serviceLog.getAction().name(),
-                                        serviceLog.getComment());
+                                        new Date());
                         FragmentManager fragmentManager = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.remove(foodServiceBoxFragment);
@@ -223,6 +230,7 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                 fragmentTransaction.commit();
             } else {
                 Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();
+                resume();
             }
         } else  {
             Toast.makeText(getContext(), "Invalid QR code", Toast.LENGTH_SHORT).show();

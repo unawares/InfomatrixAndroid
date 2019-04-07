@@ -1,23 +1,21 @@
 package com.example.infomatrix.database;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
+import com.example.infomatrix.models.HistoryLogRealmObject;
+import com.example.infomatrix.models.UserRealmObject;
 
-import com.example.infomatrix.models.HistoryLog;
-
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class DBManager {
 
     private static DBManager instance;
 
     private Realm realm;
-    private HistoryLog historyLog;
 
     private DBManager() {
         realm = Realm.getDefaultInstance();
@@ -30,36 +28,67 @@ public class DBManager {
         return instance;
     }
 
-    /**
-     * Inserting data to the Realm database
-     * @param uuid - auto generated uuid
-     * @param code - user's code
-     * @param action - action code
-     * @param comment - any comments
-     */
-    public void insertHistoryLog(String uuid, String code, String action, String comment) {
+    public void insertHistoryLog(String uuid, String fullName, String action, Date date) {
         realm.beginTransaction();
-        historyLog = realm.createObject(HistoryLog.class, uuid);
-        historyLog.setCode(code);
-        historyLog.setAction(action);
-        historyLog.setComment(comment);
+        HistoryLogRealmObject historyLogRealmObject = realm.createObject(HistoryLogRealmObject.class);
+        historyLogRealmObject.setUuid(uuid);
+        historyLogRealmObject.setFullName(fullName);
+        historyLogRealmObject.setAction(action);
+        historyLogRealmObject.setDate(date);
         realm.commitTransaction();
     }
 
-    /**
-     * Fetch all historyLog from the Realm database
-     * @return all historyLog
-     */
-    public List<HistoryLog> getAllHistoryLogs() {
-        RealmQuery<HistoryLog> query = realm.where(HistoryLog.class);
-        return query.findAll();
+    public void insertUser(String fullName, String code, int role, boolean isFood, boolean isTransport) {
+        realm.commitTransaction();
+        UserRealmObject userRealmObject = realm.createObject(UserRealmObject.class);
+        userRealmObject.setCode(code);
+        userRealmObject.setFullName(fullName);
+        userRealmObject.setRole(role);
+        userRealmObject.setTransport(isTransport);
+        userRealmObject.setFood(isFood);
+        realm.commitTransaction();
     }
 
-    /**
-     * Delete all data from database, it should be called after successful uploading historyLog to the server
-     */
+    public List<HistoryLogRealmObject> getAllHistoryLogs() {
+        RealmQuery<HistoryLogRealmObject> query = realm.where(HistoryLogRealmObject.class);
+        return query.sort("date", Sort.DESCENDING).findAll();
+    }
+
+    public List<UserRealmObject> getAllUsers() {
+        RealmQuery<UserRealmObject> query = realm.where(UserRealmObject.class);
+        return query.sort("fullName", Sort.ASCENDING).findAll();
+    }
+
+    public void updateHistoryLogs(List<HistoryLogRealmObject> historyLogRealmObjects) {
+        deleteHistoryLogsAfterUploadToServer();
+        realm.beginTransaction();
+        realm.insert(historyLogRealmObjects);
+        realm.commitTransaction();
+    }
+
+    public void updateUsers(List<UserRealmObject> userRealmObjects) {
+        deleteUsers();
+        realm.beginTransaction();
+        realm.insert(userRealmObjects);
+        realm.commitTransaction();
+    }
+
+    public UserRealmObject getUser(String code) {
+        return realm.where(UserRealmObject.class).equalTo("code", code).findFirst();
+    }
+
     public void deleteHistoryLogsAfterUploadToServer() {
-        final RealmResults<HistoryLog> result = realm.where(HistoryLog.class).findAll();
+        final RealmResults<HistoryLogRealmObject> result = realm.where(HistoryLogRealmObject.class).findAll();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                result.deleteAllFromRealm();
+            }
+        });
+    }
+
+    public void deleteUsers() {
+        final RealmResults<UserRealmObject> result = realm.where(UserRealmObject.class).findAll();
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

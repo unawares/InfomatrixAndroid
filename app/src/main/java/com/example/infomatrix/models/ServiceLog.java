@@ -10,20 +10,49 @@ public class ServiceLog implements Parcelable {
 
     public enum Action {
 
-        @SerializedName("btst") BREAKFAST,
-        @SerializedName("lnch") LUNCH,
-        @SerializedName("dnnr") DINNER,
-        @SerializedName("totp") TO_TRANSPORT,
-        @SerializedName("fmtp") FROM_TRANSPORT;
+        @SerializedName("btst") BREAKFAST("btst"),
+        @SerializedName("lnch") LUNCH("lnch"),
+        @SerializedName("dnnr") DINNER("dnnr"),
+        @SerializedName("totp") TO_TRANSPORT("totp"),
+        @SerializedName("fmtp") FROM_TRANSPORT("fmtp");
+
+        private String code;
+
+        Action(String code) {
+            this.code = code;
+        }
 
         public String toDisplayString() {
             switch (this) {
-                case LUNCH: return "Lunch";
-                case DINNER: return "Dinner";
-                case BREAKFAST: return "Breakfast";
-                case TO_TRANSPORT: return "To transport";
-                case FROM_TRANSPORT: return "from transport";
-                default: return "None";
+                case LUNCH:
+                    return "Lunch";
+                case DINNER:
+                    return "Dinner";
+                case BREAKFAST:
+                    return "Breakfast";
+                case TO_TRANSPORT:
+                    return "To transport";
+                case FROM_TRANSPORT:
+                    return "From transport";
+                default:
+                    return "None";
+            }
+        }
+
+        public static Action fromCode(String code) {
+            switch (code) {
+                case "btst":
+                    return BREAKFAST;
+                case "lnch":
+                    return LUNCH;
+                case "dnnr":
+                    return DINNER;
+                case "totp":
+                    return TO_TRANSPORT;
+                case "fmtp":
+                    return FROM_TRANSPORT;
+                default:
+                    return null;
             }
         }
 

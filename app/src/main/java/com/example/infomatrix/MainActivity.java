@@ -10,13 +10,17 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.infomatrix.backend.UsersBackend;
 import com.example.infomatrix.database.DBManager;
-import com.example.infomatrix.models.HistoryLog;
+import com.example.infomatrix.models.HistoryLogRealmObject;
+import com.example.infomatrix.models.HistoryLogResponse;
+import com.example.infomatrix.models.HistoryLogsResponse;
+import com.example.infomatrix.models.ServiceLog;
+import com.example.infomatrix.models.User;
+import com.example.infomatrix.models.UserRealmObject;
 import com.example.infomatrix.models.Users;
 import com.example.infomatrix.network.NetworkService;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,9 +53,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         if (response.isSuccessful()) {
                             Users users = response.body();
                             if (users != null) {
-                                UsersBackend
+                                List<UserRealmObject> userRealmObjects = new ArrayList<>();
+                                for (User user : users.getUsers()) {
+                                    UserRealmObject userRealmObject = new UserRealmObject();
+                                    userRealmObject.setCode(user.getCode());
+                                    userRealmObject.setFullName(user.getFullName());
+                                    userRealmObject.setRole(user.getRole().getIdentifier());
+                                    userRealmObject.setFood(user.isFood());
+                                    userRealmObject.setTransport(user.isFood());
+                                    userRealmObjects.add(userRealmObject);
+                                }
+                                DBManager
                                         .getInstance()
-                                        .setUsers(users.getUsers());
+                                        .updateUsers(userRealmObjects);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Internal Error", Toast.LENGTH_SHORT).show();
                             }
@@ -66,6 +80,48 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     }
 
                 });
+
+        NetworkService
+                .getInstance()
+                .getLogsApi()
+                .getLogs()
+                .enqueue(new Callback<HistoryLogsResponse>() {
+
+                    @Override
+                    public void onResponse(Call<HistoryLogsResponse> call, Response<HistoryLogsResponse> response) {
+                        if (response.isSuccessful()) {
+                            HistoryLogsResponse historyLogsResponse = response.body();
+                            if (historyLogsResponse != null) {
+                                List<HistoryLogRealmObject> historyLogRealmObjects = new ArrayList<>();
+                                for (HistoryLogResponse historyLogResponse : historyLogsResponse.getLogs()) {
+                                    HistoryLogRealmObject historyLogRealmObject = new HistoryLogRealmObject();
+                                    historyLogRealmObject.setUuid(historyLogResponse.getUuid());
+                                    historyLogRealmObject.setFullName(historyLogResponse.getFullName());
+                                    ServiceLog.Action action = ServiceLog.Action.fromCode(historyLogResponse.getCode());
+                                    if (action != null) {
+                                        historyLogRealmObject.setAction(action.name());
+                                    }
+                                    historyLogRealmObject.setDate(historyLogResponse.getDate());
+                                    historyLogRealmObjects.add(historyLogRealmObject);
+                                }
+                                DBManager
+                                        .getInstance()
+                                        .updateHistoryLogs(historyLogRealmObjects);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Internal Error", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<HistoryLogsResponse> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+
+                });
+
     }
 
     @Override
