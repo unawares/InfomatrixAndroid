@@ -17,15 +17,7 @@ import android.view.ViewGroup;
 import com.example.infomatrix.fragments.StudentsHistoryFragment;
 import com.example.infomatrix.fragments.SupervisorHistoryFragment;
 
-@SuppressLint("ValidFragment")
 public class UsersFragment extends Fragment {
-
-    Context context;
-
-    @SuppressLint("ValidFragment")
-    public UsersFragment(Context context) {
-        this.context = context;
-    }
 
     @Nullable
     @Override
