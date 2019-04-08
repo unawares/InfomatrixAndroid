@@ -8,6 +8,7 @@ import io.realm.annotations.RealmClass;
 
 public class HistoryLogRealmObject extends RealmObject {
 
+    @PrimaryKey
     private String uuid;
     private String fullName;
     private String action;

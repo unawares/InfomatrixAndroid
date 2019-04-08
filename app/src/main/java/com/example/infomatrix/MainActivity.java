@@ -80,48 +80,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     }
 
                 });
-
-        NetworkService
-                .getInstance()
-                .getLogsApi()
-                .getLogs()
-                .enqueue(new Callback<HistoryLogsResponse>() {
-
-                    @Override
-                    public void onResponse(Call<HistoryLogsResponse> call, Response<HistoryLogsResponse> response) {
-                        if (response.isSuccessful()) {
-                            HistoryLogsResponse historyLogsResponse = response.body();
-                            if (historyLogsResponse != null) {
-                                List<HistoryLogRealmObject> historyLogRealmObjects = new ArrayList<>();
-                                for (HistoryLogResponse historyLogResponse : historyLogsResponse.getLogs()) {
-                                    HistoryLogRealmObject historyLogRealmObject = new HistoryLogRealmObject();
-                                    historyLogRealmObject.setUuid(historyLogResponse.getUuid());
-                                    historyLogRealmObject.setFullName(historyLogResponse.getFullName());
-                                    ServiceLog.Action action = ServiceLog.Action.fromCode(historyLogResponse.getCode());
-                                    if (action != null) {
-                                        historyLogRealmObject.setAction(action.name());
-                                    }
-                                    historyLogRealmObject.setDate(historyLogResponse.getDate());
-                                    historyLogRealmObjects.add(historyLogRealmObject);
-                                }
-                                DBManager
-                                        .getInstance()
-                                        .updateHistoryLogs(historyLogRealmObjects);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Internal Error", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<HistoryLogsResponse> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-
-                });
-
     }
 
     @Override

@@ -30,8 +30,7 @@ public class DBManager {
 
     public void insertHistoryLog(String uuid, String fullName, String action, Date date) {
         realm.beginTransaction();
-        HistoryLogRealmObject historyLogRealmObject = realm.createObject(HistoryLogRealmObject.class);
-        historyLogRealmObject.setUuid(uuid);
+        HistoryLogRealmObject historyLogRealmObject = realm.createObject(HistoryLogRealmObject.class, uuid);
         historyLogRealmObject.setFullName(fullName);
         historyLogRealmObject.setAction(action);
         historyLogRealmObject.setDate(date);
@@ -40,8 +39,7 @@ public class DBManager {
 
     public void insertUser(String fullName, String code, int role, boolean isFood, boolean isTransport) {
         realm.commitTransaction();
-        UserRealmObject userRealmObject = realm.createObject(UserRealmObject.class);
-        userRealmObject.setCode(code);
+        UserRealmObject userRealmObject = realm.createObject(UserRealmObject.class, code);
         userRealmObject.setFullName(fullName);
         userRealmObject.setRole(role);
         userRealmObject.setTransport(isTransport);
@@ -60,16 +58,14 @@ public class DBManager {
     }
 
     public void updateHistoryLogs(List<HistoryLogRealmObject> historyLogRealmObjects) {
-        deleteHistoryLogsAfterUploadToServer();
         realm.beginTransaction();
-        realm.insert(historyLogRealmObjects);
+        realm.insertOrUpdate(historyLogRealmObjects);
         realm.commitTransaction();
     }
 
     public void updateUsers(List<UserRealmObject> userRealmObjects) {
-        deleteUsers();
         realm.beginTransaction();
-        realm.insert(userRealmObjects);
+        realm.insertOrUpdate(userRealmObjects);
         realm.commitTransaction();
     }
 
