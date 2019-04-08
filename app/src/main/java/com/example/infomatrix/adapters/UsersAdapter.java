@@ -16,6 +16,8 @@ import com.example.infomatrix.R;
 import com.example.infomatrix.models.User;
 import com.example.infomatrix.models.UserRealmObject;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,8 +89,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
     public void onBindViewHolder(@NonNull BaseViewHolder baseViewHolder, int position) {
         if (baseViewHolder instanceof UserViewHolder) {
             ((UserViewHolder) baseViewHolder).bind(filtered.get(position - OTHER_ITEMS_COUNT));
+            ((UserViewHolder) baseViewHolder).index.setText(Integer.toString(position - OTHER_ITEMS_COUNT + 1));
+        } else if (baseViewHolder instanceof HeaderViewHolder) {
+            ((HeaderViewHolder) baseViewHolder).headerTextView.setText("Users");
         }
-
     }
 
     @Override
@@ -106,8 +110,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
 
     class HeaderViewHolder extends BaseViewHolder {
 
+        private TextView headerTextView;
+
         public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
+            headerTextView = itemView.findViewById(R.id.header_text_view);
         }
     }
 
@@ -131,7 +138,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    filter(s.toString());
+                    filter(s.toString().trim());
                 }
 
             });
@@ -149,6 +156,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
 
     class UserViewHolder extends BaseViewHolder {
 
+        private TextView index;
         private TextView fullName;
         private TextView role;
         private RadioButton isFoodRadioButton;
@@ -157,6 +165,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            index = itemView.findViewById(R.id.index);
             fullName = itemView.findViewById(R.id.full_name);
             role = itemView.findViewById(R.id.role);
             isFoodRadioButton = itemView.findViewById(R.id.is_food_radio_button);

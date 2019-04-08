@@ -54,7 +54,7 @@ public class DBManager {
 
     public List<UserRealmObject> getAllUsers() {
         RealmQuery<UserRealmObject> query = realm.where(UserRealmObject.class);
-        return query.sort("fullName", Sort.ASCENDING).findAll();
+        return query.sort(new String[]{"role", "fullName"}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING}).findAll();
     }
 
     public void updateHistoryLogs(List<HistoryLogRealmObject> historyLogRealmObjects) {

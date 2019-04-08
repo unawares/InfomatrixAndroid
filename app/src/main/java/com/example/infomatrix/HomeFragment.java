@@ -51,16 +51,19 @@ public class HomeFragment extends Fragment {
         breakfast.setFoodType(Food.FoodType.BREAKFAST);
         breakfast.setTitle("Breakfast");
         breakfast.setDescription("Infomatrix Food Tracker");
+        breakfast.setDrawableId(R.drawable.breakfast);
         foods.add(breakfast);
 
         lunch.setFoodType(Food.FoodType.LUNCH);
         lunch.setTitle("Lunch");
         lunch.setDescription("Infomatrix Food Tracker");
+        lunch.setDrawableId(R.drawable.lunch);
         foods.add(lunch);
 
         dinner.setFoodType(Food.FoodType.DINNER);
         dinner.setTitle("Dinner");
         dinner.setDescription("Infomatrix Food Tracker");
+        dinner.setDrawableId(R.drawable.dinner);
         foods.add(dinner);
 
         FoodsAdapter foodsAdapter = new FoodsAdapter(getContext(), foods);
@@ -108,28 +111,30 @@ public class HomeFragment extends Fragment {
 
                             @Override
                             public void onResponse(Call<Users> call, Response<Users> response) {
-                                if (response.isSuccessful()) {
-                                    Users users = response.body();
-                                    if (users.isSuccess()) {
-                                        List<UserRealmObject> userRealmObjects = new ArrayList<>();
-                                        for (User user : users.getUsers()) {
-                                            UserRealmObject userRealmObject = new UserRealmObject();
-                                            userRealmObject.setCode(user.getCode());
-                                            userRealmObject.setFullName(user.getFullName());
-                                            userRealmObject.setRole(user.getRole().getIdentifier());
-                                            userRealmObject.setFood(user.isFood());
-                                            userRealmObject.setTransport(user.isFood());
-                                            userRealmObjects.add(userRealmObject);
+                                if (getContext() != null) {
+                                    if (response.isSuccessful()) {
+                                        Users users = response.body();
+                                        if (users.isSuccess()) {
+                                            List<UserRealmObject> userRealmObjects = new ArrayList<>();
+                                            for (User user : users.getUsers()) {
+                                                UserRealmObject userRealmObject = new UserRealmObject();
+                                                userRealmObject.setCode(user.getCode());
+                                                userRealmObject.setFullName(user.getFullName());
+                                                userRealmObject.setRole(user.getRole().getIdentifier());
+                                                userRealmObject.setFood(user.isFood());
+                                                userRealmObject.setTransport(user.isFood());
+                                                userRealmObjects.add(userRealmObject);
+                                            }
+                                            DBManager
+                                                    .getInstance()
+                                                    .updateUsers(userRealmObjects);
+                                            Toast.makeText(getContext(), "Users has been synchronized", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getContext(), "Internal Error", Toast.LENGTH_SHORT).show();
                                         }
-                                        DBManager
-                                                .getInstance()
-                                                .updateUsers(userRealmObjects);
-                                        Toast.makeText(getContext(), "Users has been synchronized", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(getContext(), "Internal Error", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
                                     }
-                                } else {
-                                    Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
                                 }
                                 synchronizationView.setOnClickListener(self);
                             }

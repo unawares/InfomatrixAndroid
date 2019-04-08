@@ -19,6 +19,8 @@ public class Food implements Parcelable {
 
     private FoodType foodType;
 
+    private int drawableId;
+
     public Food() {
 
     }
@@ -27,6 +29,7 @@ public class Food implements Parcelable {
         description = in.readString();
         foodType = FoodType.valueOf(in.readString());
         title = in.readString();
+        drawableId = in.readInt();
     }
 
     @Override
@@ -34,6 +37,7 @@ public class Food implements Parcelable {
         dest.writeString(description);
         dest.writeString(foodType.name());
         dest.writeString(title);
+        dest.writeInt(drawableId);
     }
 
     @Override
@@ -77,4 +81,11 @@ public class Food implements Parcelable {
         this.foodType = foodType;
     }
 
+    public int getDrawableId() {
+        return drawableId;
+    }
+
+    public void setDrawableId(int drawableId) {
+        this.drawableId = drawableId;
+    }
 }

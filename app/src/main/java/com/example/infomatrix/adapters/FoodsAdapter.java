@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.infomatrix.R;
 import com.example.infomatrix.models.Food;
 
@@ -84,6 +85,7 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
                 }
 
             });
+            Glide.with(context).load(food.getDrawableId()).into(itemBackgroundImageView);
 
         }
 

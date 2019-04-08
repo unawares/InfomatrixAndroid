@@ -12,12 +12,13 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:padding="8dp"
+            android:padding="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:padding="8dp"
+                android:textSize="16sp"
+                android:padding="4dp"
                 android:background="@android:color/transparent"
                 android:id="@+id/search_edit_text"
                 android:hint="Type user name"
