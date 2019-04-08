@@ -160,6 +160,14 @@ public class BarcodeReaderActivity extends AppCompatActivity implements BarcodeR
             BarcodeReaderActivity.getInstance().mBarcodeReaderFragment.pauseScanning();
         }
 
+        protected void playSuccessBeep() {
+            BarcodeReaderActivity.getInstance().mBarcodeReaderFragment.playSuccessBeep();
+        }
+
+        protected void playErrorBeep() {
+            BarcodeReaderActivity.getInstance().mBarcodeReaderFragment.playErrorBeep();
+        }
+
         protected void finish() {
             BarcodeReaderActivity.getInstance().finish();
         }

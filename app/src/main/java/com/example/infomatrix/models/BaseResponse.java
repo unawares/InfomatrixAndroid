@@ -12,7 +12,7 @@ public abstract class BaseResponse implements Parcelable {
     @Expose
     private boolean success;
 
-    @SerializedName("error")
+    @SerializedName("beep_error")
     @Expose
     private boolean error;
 

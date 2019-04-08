@@ -64,6 +64,7 @@ public class DBManager {
     }
 
     public void updateUsers(List<UserRealmObject> userRealmObjects) {
+        deleteUsers();
         realm.beginTransaction();
         realm.insertOrUpdate(userRealmObjects);
         realm.commitTransaction();

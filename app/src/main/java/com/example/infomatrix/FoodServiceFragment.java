@@ -161,10 +161,10 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
             user.setFood(userRealmObject.isFood());
             user.setTransport(userRealmObject.isTransport());
             if (user.isFood()) {
+                playSuccessBeep();
                 final ServiceLog serviceLog = new ServiceLog();
                 serviceLog.setUuid(UUID.randomUUID().toString().replace("-", ""));
                 serviceLog.setCode(user.getCode());
-                System.out.println(food);
                 switch (food.getFoodType()) {
                     case BREAKFAST:
                         serviceLog.setComment("Breakfast done by " + user.getFullName());
@@ -229,10 +229,12 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                 fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
                 fragmentTransaction.commit();
             } else {
+                playErrorBeep();
                 Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();
                 resume();
             }
         } else  {
+            playErrorBeep();
             Toast.makeText(getContext(), "Invalid QR code", Toast.LENGTH_SHORT).show();
             resume();
         }

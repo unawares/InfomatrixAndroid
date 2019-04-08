@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.TypedArray;
-import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
@@ -45,8 +43,6 @@ import com.notbytes.barcode_reader.camera.GraphicOverlay;
 import com.notbytes.barcode_reader.design.OverlayFocusImageView;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class BarcodeReaderFragment extends Fragment implements View.OnTouchListener, BarcodeGraphicTracker.BarcodeGraphicTrackerListener {
@@ -64,7 +60,6 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
     // constants used to pass extra data in the intent
     protected boolean autoFocus = false;
     protected boolean useFlash = false;
-    private String beepSoundFile;
     public static final String BarcodeObject = "Barcode";
     private boolean isPaused = false;
 
@@ -98,7 +93,6 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
 
 
     public static BarcodeReaderFragment newInstance(boolean autoFocus, boolean useFlash, int scanOverlayVisibleStatus) {
-
         Bundle args = new Bundle();
         args.putBoolean(KEY_AUTO_FOCUS, autoFocus);
         args.putBoolean(KEY_USE_FLASH, useFlash);
@@ -115,10 +109,6 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
      */
     public void setListener(BarcodeReaderListener barcodeReaderListener) {
         mListener = barcodeReaderListener;
-    }
-
-    public void setBeepSoundFile(String fileName) {
-        beepSoundFile = fileName;
     }
 
     public void pauseScanning() {
@@ -640,7 +630,7 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
         }
     }
 
-    public void playBeep() {
+    public void playSuccessBeep() {
         MediaPlayer m = new MediaPlayer();
         try {
             if (m.isPlaying()) {
@@ -648,14 +638,41 @@ public class BarcodeReaderFragment extends Fragment implements View.OnTouchListe
                 m.release();
                 m = new MediaPlayer();
             }
-
-            AssetFileDescriptor descriptor = getActivity().getAssets().openFd(beepSoundFile != null ? beepSoundFile : "beep.mp3");
+            AssetFileDescriptor descriptor = getContext().getResources().openRawResourceFd(R.raw.beep_success);
             m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
+            m.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.setVolume(1f, 1f);
+                    mediaPlayer.start();
+                }
+            });
+            m.prepareAsync();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            m.prepare();
-            m.setVolume(1f, 1f);
-            m.start();
+    public void playErrorBeep() {
+        MediaPlayer m = new MediaPlayer();
+        try {
+            if (m.isPlaying()) {
+                m.stop();
+                m.release();
+                m = new MediaPlayer();
+            }
+            AssetFileDescriptor descriptor = getContext().getResources().openRawResourceFd(R.raw.beep_error);
+            m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+            descriptor.close();
+            m.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mediaPlayer) {
+                    mediaPlayer.setVolume(1f, 1f);
+                    mediaPlayer.start();
+                }
+            });
+            m.prepareAsync();
         } catch (Exception e) {
             e.printStackTrace();
         }
