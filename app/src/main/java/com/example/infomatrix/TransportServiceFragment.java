@@ -1,5 +1,7 @@
 package com.example.infomatrix;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -97,6 +100,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
 
     public static class TransportServiceBoxFragment extends Fragment {
 
+        private ProgressBar progress;
         private ActionsListener actionsListener;
         private User user;
         private ServiceLog serviceLog;
@@ -104,6 +108,21 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
         private TextView actionTextView;
         private Button submitButton;
         private Button cancelButton;
+
+        public void showErrorAlert(String message) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Error!!!")
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setNegativeButton("GOT",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
         @Nullable
         @Override
@@ -115,6 +134,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
+            progress = view.findViewById(R.id.progress);
             fullNameTextView = view.findViewById(R.id.full_name);
             actionTextView = view.findViewById(R.id.action);
             submitButton = view.findViewById(R.id.submit_button);
@@ -132,6 +152,8 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    submitButton.setEnabled(false);
+                    progress.setVisibility(ProgressBar.VISIBLE);
                     submitButton.setOnClickListener(null);
                     final View.OnClickListener self = this;
                     NetworkService
@@ -150,18 +172,24 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                                                 actionsListener.onSubmit();
                                             }
                                         } else {
-                                            Toast.makeText(getContext(), messagedResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                            showErrorAlert(messagedResponse.getMessage());
                                         }
                                     } else {
-                                        Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
+                                        showErrorAlert(response.message());
                                     }
+                                    submitButton.setEnabled(true);
+                                    progress.setVisibility(ProgressBar.INVISIBLE);
                                     submitButton.setOnClickListener(self);
+
                                 }
 
                                 @Override
                                 public void onFailure(Call<MessagedResponse> call, Throwable t) {
                                     t.printStackTrace();
+                                    submitButton.setEnabled(true);
+                                    progress.setVisibility(ProgressBar.INVISIBLE);
                                     submitButton.setOnClickListener(self);
+                                    showErrorAlert("Internal Error");
                                 }
 
                             });
@@ -321,7 +349,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                 Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();
                 resume();
             }
-        } else  {
+        } else {
             playErrorBeep();
             Toast.makeText(getContext(), "Invalid QR code", Toast.LENGTH_SHORT).show();
             resume();

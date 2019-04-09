@@ -38,10 +38,10 @@ public class SynchronizeUsersButtonView extends ConstraintLayout {
                     case MotionEvent.ACTION_DOWN:
                         foreground.setCardBackgroundColor(getResources().getColor(R.color.synchronizeUserBackgroundColorPressed));
                         break;
-                    case MotionEvent.ACTION_CANCEL:
                     case MotionEvent.ACTION_UP:
-                        foreground.setCardBackgroundColor(getResources().getColor(R.color.synchronizeUserBackgroundColor));
                         performClick();
+                    case MotionEvent.ACTION_CANCEL:
+                        foreground.setCardBackgroundColor(getResources().getColor(R.color.synchronizeUserBackgroundColor));
                         break;
                 }
                 return true;
