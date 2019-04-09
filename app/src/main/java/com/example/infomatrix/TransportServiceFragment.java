@@ -36,6 +36,65 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
         FROM
     }
 
+    public static class AlreadyServedBoxFragment extends Fragment {
+
+        private User user;
+        private ServiceLog serviceLog;
+
+        private ActionsListener actionsListener;
+
+        private TextView fullNameTextView;
+        private TextView actionTextView;
+        private Button cancelButton;
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_already_served_box, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            fullNameTextView = view.findViewById(R.id.full_name);
+            actionTextView = view.findViewById(R.id.action);
+            cancelButton = view.findViewById(R.id.cancel_button);
+
+            Bundle bundle = getArguments();
+
+            if (bundle != null) {
+                serviceLog = bundle.getParcelable("logs_body");
+                user = bundle.getParcelable("user_body");
+                fullNameTextView.setText(user.getFullName());
+                actionTextView.setText(serviceLog.getAction().toDisplayString());
+            }
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (actionsListener != null) {
+                        actionsListener.onCancel();
+                    }
+                }
+            });
+        }
+
+        public interface ActionsListener {
+
+            void onCancel();
+
+        }
+
+        public ActionsListener getActionsListener() {
+            return actionsListener;
+        }
+
+        public void setActionsListener(ActionsListener actionsListener) {
+            this.actionsListener = actionsListener;
+        }
+    }
+
     public static class TransportServiceBoxFragment extends Fragment {
 
         private ActionsListener actionsListener;
@@ -177,58 +236,86 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                         serviceLog.setAction(ServiceLog.Action.FROM_TRANSPORT);
                         break;
                 }
-                final TransportServiceBoxFragment transportServiceBoxFragment = new TransportServiceBoxFragment();
+
                 Bundle bundle = new Bundle();
+
                 bundle.putParcelable("user_body", user);
                 bundle.putParcelable("logs_body", serviceLog);
-                transportServiceBoxFragment.setArguments(bundle);
 
-                transportServiceBoxFragment.setActionsListener(new TransportServiceBoxFragment.ActionsListener() {
+                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name())) {
+                    final TransportServiceBoxFragment transportServiceBoxFragment = new TransportServiceBoxFragment();
+                    transportServiceBoxFragment.setArguments(bundle);
+                    transportServiceBoxFragment.setActionsListener(new TransportServiceBoxFragment.ActionsListener() {
 
-                    @Override
-                    public void onSubmit() {
-                        DBManager
-                                .getInstance()
-                                .insertHistoryLog(
-                                        serviceLog.getUuid(),
-                                        user.getFullName(),
-                                        serviceLog.getAction().name(),
-                                        new Date());
-                        FragmentManager fragmentManager = getChildFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                        fragmentTransaction.remove(transportServiceBoxFragment);
-                        fragmentTransaction.runOnCommit(new Runnable() {
-                            @Override
-                            public void run() {
-                                resume();
-                            }
-                        });
-                        fragmentTransaction.commit();
-                    }
+                        @Override
+                        public void onSubmit() {
+                            DBManager
+                                    .getInstance()
+                                    .insertHistoryLog(
+                                            serviceLog.getUuid(),
+                                            user.getFullName(),
+                                            serviceLog.getAction().name(),
+                                            new Date());
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(transportServiceBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        FragmentManager fragmentManager = getChildFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                        fragmentTransaction.remove(transportServiceBoxFragment);
-                        fragmentTransaction.runOnCommit(new Runnable() {
-                            @Override
-                            public void run() {
-                                resume();
-                            }
-                        });
-                        fragmentTransaction.commit();
-                    }
+                        @Override
+                        public void onCancel() {
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(transportServiceBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
 
-                });
+                    });
 
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.replace(R.id.service_box, transportServiceBoxFragment);
-                fragmentTransaction.commit();
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.service_box, transportServiceBoxFragment);
+                    fragmentTransaction.commit();
+                } else {
+                    final AlreadyServedBoxFragment alreadyServedBoxFragment = new AlreadyServedBoxFragment();
+                    alreadyServedBoxFragment.setArguments(bundle);
+                    alreadyServedBoxFragment.setActionsListener(new AlreadyServedBoxFragment.ActionsListener() {
+                        @Override
+                        public void onCancel() {
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(alreadyServedBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
+                    });
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.service_box, alreadyServedBoxFragment);
+                    fragmentTransaction.commit();
+                }
             } else {
                 playErrorBeep();
                 Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();

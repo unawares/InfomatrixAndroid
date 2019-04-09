@@ -94,4 +94,11 @@ public class DBManager {
         });
     }
 
+    public boolean hadService(String fullName, String action) {
+        RealmResults<HistoryLogRealmObject> results = realm.where(HistoryLogRealmObject.class)
+                .equalTo("fullName", fullName)
+                .equalTo("action", action).findAll();
+        return results.size() > 0;
+    }
+
 }

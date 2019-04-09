@@ -34,6 +34,65 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
 
     private Food food;
 
+    public static class AlreadyServedBoxFragment extends Fragment {
+
+        private User user;
+        private ServiceLog serviceLog;
+
+        private AlreadyServedBoxFragment.ActionsListener actionsListener;
+
+        private TextView fullNameTextView;
+        private TextView actionTextView;
+        private Button cancelButton;
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_already_served_box, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+
+            fullNameTextView = view.findViewById(R.id.full_name);
+            actionTextView = view.findViewById(R.id.action);
+            cancelButton = view.findViewById(R.id.cancel_button);
+
+            Bundle bundle = getArguments();
+
+            if (bundle != null) {
+                serviceLog = bundle.getParcelable("logs_body");
+                user = bundle.getParcelable("user_body");
+                fullNameTextView.setText(user.getFullName());
+                actionTextView.setText(serviceLog.getAction().toDisplayString());
+            }
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (actionsListener != null) {
+                        actionsListener.onCancel();
+                    }
+                }
+            });
+        }
+
+        public interface ActionsListener {
+
+            void onCancel();
+
+        }
+
+        public AlreadyServedBoxFragment.ActionsListener getActionsListener() {
+            return actionsListener;
+        }
+
+        public void setActionsListener(AlreadyServedBoxFragment.ActionsListener actionsListener) {
+            this.actionsListener = actionsListener;
+        }
+    }
+
     public static class FoodServiceBoxFragment extends Fragment {
 
         private ActionsListener actionsListener;
@@ -179,64 +238,89 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                         serviceLog.setAction(ServiceLog.Action.DINNER);
                         break;
                 }
-                final FoodServiceFragment.FoodServiceBoxFragment foodServiceBoxFragment = new FoodServiceFragment.FoodServiceBoxFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("user_body", user);
                 bundle.putParcelable("logs_body", serviceLog);
-                foodServiceBoxFragment.setArguments(bundle);
+                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name())) {
+                    final FoodServiceFragment.FoodServiceBoxFragment foodServiceBoxFragment = new FoodServiceFragment.FoodServiceBoxFragment();
+                    foodServiceBoxFragment.setArguments(bundle);
+                    foodServiceBoxFragment.setActionsListener(new FoodServiceBoxFragment.ActionsListener() {
 
-                foodServiceBoxFragment.setActionsListener(new FoodServiceBoxFragment.ActionsListener() {
+                        @Override
+                        public void onSubmit() {
+                            DBManager
+                                    .getInstance()
+                                    .insertHistoryLog(
+                                            serviceLog.getUuid(),
+                                            user.getFullName(),
+                                            serviceLog.getAction().name(),
+                                            new Date());
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(foodServiceBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
 
-                    @Override
-                    public void onSubmit() {
-                        DBManager
-                                .getInstance()
-                                .insertHistoryLog(
-                                        serviceLog.getUuid(),
-                                        user.getFullName(),
-                                        serviceLog.getAction().name(),
-                                        new Date());
-                        FragmentManager fragmentManager = getChildFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                        fragmentTransaction.remove(foodServiceBoxFragment);
-                        fragmentTransaction.runOnCommit(new Runnable() {
-                            @Override
-                            public void run() {
-                                resume();
-                            }
-                        });
-                        fragmentTransaction.commit();
-                    }
+                        @Override
+                        public void onCancel() {
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(foodServiceBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        FragmentManager fragmentManager = getChildFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                        fragmentTransaction.remove(foodServiceBoxFragment);
-                        fragmentTransaction.runOnCommit(new Runnable() {
-                            @Override
-                            public void run() {
-                                resume();
-                            }
-                        });
-                        fragmentTransaction.commit();
-                    }
+                    });
 
-                });
-
-                FragmentManager fragmentManager = getChildFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
-                fragmentTransaction.commit();
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
+                    fragmentTransaction.commit();
+                } else {
+                    final AlreadyServedBoxFragment alreadyServedBoxFragment = new AlreadyServedBoxFragment();
+                    alreadyServedBoxFragment.setArguments(bundle);
+                    alreadyServedBoxFragment.setActionsListener(new AlreadyServedBoxFragment.ActionsListener() {
+                        @Override
+                        public void onCancel() {
+                            FragmentManager fragmentManager = getChildFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            fragmentTransaction.remove(alreadyServedBoxFragment);
+                            fragmentTransaction.runOnCommit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    resume();
+                                }
+                            });
+                            fragmentTransaction.commit();
+                        }
+                    });
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.service_box, alreadyServedBoxFragment);
+                    fragmentTransaction.commit();
+                }
             } else {
                 playErrorBeep();
                 Toast.makeText(getContext(), "Not Paid", Toast.LENGTH_SHORT).show();
                 resume();
             }
-        } else  {
+        } else {
             playErrorBeep();
             Toast.makeText(getContext(), "Invalid QR code", Toast.LENGTH_SHORT).show();
             resume();
