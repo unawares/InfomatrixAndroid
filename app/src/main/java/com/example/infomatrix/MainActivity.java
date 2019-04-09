@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.infomatrix.adapters.UsersAdapter;
 import com.example.infomatrix.database.DBManager;
 import com.example.infomatrix.models.HistoryLogRealmObject;
 import com.example.infomatrix.models.HistoryLogResponse;
@@ -41,7 +42,34 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         bottomNavigationView.setSelectedItemId(R.id.home);
+    }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+        switch (menuItem.getItemId()) {
+            case R.id.home:
+                inflateFragment(new HomeFragment());
+                break;
+            case R.id.users:
+                inflateFragment(new UsersFragment());
+                break;
+            case R.id.profile:
+                inflateFragment(new ProfileFragment());
+                break;
+        }
+
+        return true;
+    }
+
+    private void inflateFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_frame_layout, fragment);
+        fragmentTransaction.commit();
+    }
+
+    private void getUsers() {
         NetworkService
                 .getInstance()
                 .getUsersApi()
@@ -82,28 +110,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 });
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
-        switch (menuItem.getItemId()) {
-            case R.id.home:
-                inflateFragment(new HomeFragment());
-                break;
-            case R.id.users:
-                inflateFragment(new UsersFragment());
-                break;
-            case R.id.profile:
-                inflateFragment(new ProfileFragment());
-                break;
-        }
-
-        return true;
-    }
-
-    private void inflateFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
 }

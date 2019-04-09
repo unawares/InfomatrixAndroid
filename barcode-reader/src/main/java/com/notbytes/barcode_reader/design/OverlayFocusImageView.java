@@ -45,7 +45,7 @@ public class OverlayFocusImageView extends OverlayQRScannerImageView {
             canvas.restore();
             float centerX = getWidth() / 2f;
             float centerY = getHeight() / 2f;
-            paint.setColor(getResources().getColor(android.R.color.holo_blue_light));
+            paint.setColor(getResources().getColor(R.color.colorPrimaryDark));
             canvas.drawRoundRect(
                     getBoundingBox(),
                     radius, radius, paint);

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#4083FF</color>
+    <dimen name="cpb_stroke_width">4dp</dimen>
 </resources>

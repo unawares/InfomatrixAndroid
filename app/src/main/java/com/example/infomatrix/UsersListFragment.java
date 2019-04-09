@@ -10,9 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.example.infomatrix.adapters.UsersAdapter;
 import com.example.infomatrix.database.DBManager;
+import com.example.infomatrix.models.User;
+import com.example.infomatrix.models.UserRealmObject;
+import com.example.infomatrix.models.Users;
+import com.example.infomatrix.network.NetworkService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UsersListFragment extends Fragment {
 
@@ -31,4 +43,5 @@ public class UsersListFragment extends Fragment {
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         usersRecyclerView.setAdapter(new UsersAdapter(getContext(), DBManager.getInstance().getAllUsers()));
     }
+
 }

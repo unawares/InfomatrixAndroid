@@ -1,6 +1,7 @@
 package com.example.infomatrix.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -13,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.infomatrix.R;
+import com.example.infomatrix.database.DBManager;
 import com.example.infomatrix.models.User;
 import com.example.infomatrix.models.UserRealmObject;
 
@@ -43,10 +45,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
         notifyDataSetChanged();
     }
 
-    public UsersAdapter(Context context, List<UserRealmObject> users) {
+    public UsersAdapter(Context context, List<UserRealmObject> userRealmObjects) {
         this.context = context;
+        this.users = userRealmObjects;
         this.filtered = new ArrayList<>();
-        this.users = users;
         filter("");
     }
 
@@ -87,11 +89,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder baseViewHolder, int position) {
-        if (baseViewHolder instanceof UserViewHolder) {
-            ((UserViewHolder) baseViewHolder).bind(filtered.get(position - OTHER_ITEMS_COUNT));
-            ((UserViewHolder) baseViewHolder).index.setText(Integer.toString(position - OTHER_ITEMS_COUNT + 1));
-        } else if (baseViewHolder instanceof HeaderViewHolder) {
-            ((HeaderViewHolder) baseViewHolder).headerTextView.setText("Users");
+        switch (getItemViewType(position)) {
+            case ITEM:
+                UserRealmObject userRealmObject = filtered.get(position - OTHER_ITEMS_COUNT);
+                if (userRealmObject.isValid()) {
+                    ((UserViewHolder) baseViewHolder).bind(userRealmObject);
+                } else {
+                    ((UserViewHolder) baseViewHolder).bind(null);
+                }
+                ((UserViewHolder) baseViewHolder).index.setText(Integer.toString(position - OTHER_ITEMS_COUNT + 1));
+                break;
+            case HEADER:
+                ((HeaderViewHolder) baseViewHolder).headerTextView.setText("Users");
+                break;
         }
     }
 
@@ -173,10 +183,21 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.BaseViewHold
         }
 
         public void bind(UserRealmObject user) {
-            fullName.setText(user.getFullName());
-            role.setText(User.Role.get(user.getRole()).toDisplayString());
-            isFoodRadioButton.setChecked(user.isFood());
-            isTransportRadioButton.setChecked(user.isTransport());
+            if (user != null) {
+                fullName.setText(user.getFullName());
+                role.setText(User.Role.get(user.getRole()).toDisplayString());
+                isFoodRadioButton.setChecked(user.isFood());
+                isTransportRadioButton.setChecked(user.isTransport());
+            } else {
+                index.setTextColor(Color.RED);
+                fullName.setTextColor(Color.RED);
+                role.setTextColor(Color.RED);
+                fullName.setText("Deleted User");
+                role.setText("Invalid");
+                isFoodRadioButton.setChecked(false);
+                isTransportRadioButton.setChecked(false);
+            }
+
         }
 
     }
