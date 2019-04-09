@@ -196,6 +196,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                                         new Date());
                         FragmentManager fragmentManager = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         fragmentTransaction.remove(transportServiceBoxFragment);
                         fragmentTransaction.runOnCommit(new Runnable() {
                             @Override
@@ -210,6 +211,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                     public void onCancel() {
                         FragmentManager fragmentManager = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         fragmentTransaction.remove(transportServiceBoxFragment);
                         fragmentTransaction.runOnCommit(new Runnable() {
                             @Override
@@ -224,6 +226,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
 
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.service_box, transportServiceBoxFragment);
                 fragmentTransaction.commit();
             } else {

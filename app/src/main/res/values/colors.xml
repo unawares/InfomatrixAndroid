@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#4083FF</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackground">#F6F7F9</color>
+    <color name="synchronizeUserBackgroundColor">#FFFFFF</color>
+    <color name="synchronizeUserBackgroundColorPressed">#EBEBEB</color>
 </resources>

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.infomatrix.R;
+import com.example.infomatrix.design.QrCodeButtonView;
 import com.example.infomatrix.models.Food;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
         private ImageView itemBackgroundImageView;
         private TextView titleTextView;
         private TextView descriptionTextView;
-        private ImageView qrCodeButton;
+        private QrCodeButtonView qrCodeButton;
 
 
         private FoodViewHolder(@NonNull View itemView) {
@@ -69,7 +70,7 @@ public class FoodsAdapter extends RecyclerView.Adapter<FoodsAdapter.FoodViewHold
             itemBackgroundImageView = itemView.findViewById(R.id.item_background_image_view);
             titleTextView = itemView.findViewById(R.id.title_text_view);
             descriptionTextView = itemView.findViewById(R.id.description_text_view);
-            qrCodeButton = itemView.findViewById(R.id.qr_code_button);
+            qrCodeButton = itemView.findViewById(R.id.qr_code);
         }
 
         private void bindData(final Food food)  {

@@ -198,6 +198,7 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                                         new Date());
                         FragmentManager fragmentManager = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         fragmentTransaction.remove(foodServiceBoxFragment);
                         fragmentTransaction.runOnCommit(new Runnable() {
                             @Override
@@ -212,6 +213,7 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                     public void onCancel() {
                         FragmentManager fragmentManager = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                         fragmentTransaction.remove(foodServiceBoxFragment);
                         fragmentTransaction.runOnCommit(new Runnable() {
                             @Override
@@ -226,6 +228,7 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
 
                 FragmentManager fragmentManager = getChildFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.service_box, foodServiceBoxFragment);
                 fragmentTransaction.commit();
             } else {

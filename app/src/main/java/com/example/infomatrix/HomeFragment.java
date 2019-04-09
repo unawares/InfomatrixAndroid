@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.infomatrix.adapters.FoodsAdapter;
 import com.example.infomatrix.database.DBManager;
+import com.example.infomatrix.design.QrCodeButtonView;
+import com.example.infomatrix.design.SynchronizeUsersButtonView;
 import com.example.infomatrix.models.Food;
 import com.example.infomatrix.models.User;
 import com.example.infomatrix.models.UserRealmObject;
@@ -36,10 +38,10 @@ public class HomeFragment extends Fragment {
     private static final int FOOD_SERVICE_REQUEST_CODE = 239;
     private static final int TRANSPORTATION_REQUEST_CODE = 330;
 
-    private View synchronizationView;
+    private SynchronizeUsersButtonView synchronizeUsersButtonView;
     private RecyclerView foodsRecyclerView;
-    private ImageView transportationToCampQrCodeButton;
-    private ImageView transportationFromCampQrCodeButton;
+    private QrCodeButtonView transportationToCampQrCodeButton;
+    private QrCodeButtonView transportationFromCampQrCodeButton;
 
     private void initFoods() {
         List<Food> foods = new ArrayList<>();
@@ -85,7 +87,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        synchronizationView = view.findViewById(R.id.synchronization_view);
+        synchronizeUsersButtonView = view.findViewById(R.id.synchronize_users_button_view);
 
         transportationToCampQrCodeButton = view.findViewById(R.id.transportation_to_qr_code_button);
         transportationFromCampQrCodeButton = view.findViewById(R.id.transportation_from_qr_code_button);
@@ -98,11 +100,12 @@ public class HomeFragment extends Fragment {
         transportationToCampQrCodeButton.setOnClickListener(onTransportationClickListener);
         transportationFromCampQrCodeButton.setOnClickListener(onTransportationClickListener);
 
-        synchronizationView.setOnClickListener(new View.OnClickListener() {
+        synchronizeUsersButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final View.OnClickListener self = this;
-                synchronizationView.setOnClickListener(null);
+                synchronizeUsersButtonView.setLoading(true);
+                synchronizeUsersButtonView.setOnClickListener(null);
                 NetworkService
                         .getInstance()
                         .getUsersApi()
@@ -136,13 +139,15 @@ public class HomeFragment extends Fragment {
                                         Toast.makeText(getContext(), response.message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                                synchronizationView.setOnClickListener(self);
+                                synchronizeUsersButtonView.setLoading(false);
+                                synchronizeUsersButtonView.setOnClickListener(self);
                             }
 
                             @Override
                             public void onFailure(Call<Users> call, Throwable t) {
                                 t.printStackTrace();
-                                synchronizationView.setOnClickListener(self);
+                                synchronizeUsersButtonView.setLoading(false);
+                                synchronizeUsersButtonView.setOnClickListener(self);
                             }
 
                         });

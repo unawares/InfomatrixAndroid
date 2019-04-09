@@ -33,60 +33,10 @@
 
             </android.support.constraint.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <com.example.infomatrix.design.SynchronizeUsersButtonView
+                android:id="@+id/synchronize_users_button_view"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="#FFFFFF">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:padding="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_max="500dp">
-
-                    <ImageView
-                        android:id="@+id/icon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:contentDescription="Synchronization"
-                        android:src="@drawable/sync"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:text="Synchronize users"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toRightOf="@id/icon"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:contentDescription="Arrow"
-                        android:src="@drawable/arrow"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
-
-                <View
-                    android:id="@+id/synchronization_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </android.support.constraint.ConstraintLayout>
+                android:layout_height="64dp" />
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -190,25 +140,14 @@
                                     android:layout_height="match_parent"
                                     android:padding="16dp">
 
-                                    <RelativeLayout
+                                    <com.example.infomatrix.design.QrCodeButtonView
+                                        android:id="@+id/transportation_to_qr_code_button"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
-                                        android:background="@drawable/qr_rounded_view"
                                         app:layout_constraintBottom_toTopOf="@id/left_view_text"
                                         app:layout_constraintLeft_toLeftOf="parent"
                                         app:layout_constraintRight_toRightOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent">
-
-                                        <ImageView
-                                            android:id="@+id/transportation_to_qr_code_button"
-                                            android:layout_width="45dp"
-                                            android:layout_height="45dp"
-                                            android:layout_centerInParent="true"
-                                            android:contentDescription="QR Code"
-                                            android:src="@drawable/qr" />
-
-
-                                    </RelativeLayout>
+                                        app:layout_constraintTop_toTopOf="parent"/>
 
                                     <LinearLayout
                                         android:id="@+id/left_view_text"
@@ -259,25 +198,14 @@
                                     android:layout_height="match_parent"
                                     android:padding="16dp">
 
-                                    <RelativeLayout
+                                    <com.example.infomatrix.design.QrCodeButtonView
+                                        android:id="@+id/transportation_from_qr_code_button"
                                         android:layout_width="50dp"
                                         android:layout_height="50dp"
-                                        android:background="@drawable/qr_rounded_view"
                                         app:layout_constraintBottom_toTopOf="@id/right_view_text"
                                         app:layout_constraintLeft_toLeftOf="parent"
                                         app:layout_constraintRight_toRightOf="parent"
-                                        app:layout_constraintTop_toTopOf="parent">
-
-                                        <ImageView
-                                            android:id="@+id/transportation_from_qr_code_button"
-                                            android:layout_width="45dp"
-                                            android:layout_height="45dp"
-                                            android:layout_centerInParent="true"
-                                            android:contentDescription="QR Code"
-                                            android:src="@drawable/qr" />
-
-
-                                    </RelativeLayout>
+                                        app:layout_constraintTop_toTopOf="parent" />
 
                                     <LinearLayout
                                         android:id="@+id/right_view_text"

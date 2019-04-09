@@ -76,25 +76,12 @@
                 <!--card_view:layout_constraintStart_toStartOf="@id/description_text_view"-->
                 <!--card_view:layout_constraintTop_toBottomOf="@id/title_text_view" />-->
 
-
-            <RelativeLayout
+            <com.example.infomatrix.design.QrCodeButtonView
                 android:id="@+id/qr_code"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/qr_rounded_view"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent">
-
-                <ImageView
-                    android:id="@+id/qr_code_button"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_centerInParent="true"
-                    android:contentDescription="QR Code"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/qr" />
-
-            </RelativeLayout>
+                card_view:layout_constraintEnd_toEndOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
