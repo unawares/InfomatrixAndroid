@@ -3,7 +3,10 @@ package com.example.infomatrix.database;
 import com.example.infomatrix.models.HistoryLogRealmObject;
 import com.example.infomatrix.models.UserRealmObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.realm.Realm;
@@ -94,10 +97,23 @@ public class DBManager {
         });
     }
 
-    public boolean hadService(String fullName, String action) {
+    public boolean hadService(String fullName, String action, Calendar date) {
+        Calendar startDate = new GregorianCalendar(
+                date.get(Calendar.YEAR),
+                date.get(Calendar.MONTH),
+                date.get(Calendar.DAY_OF_MONTH)
+        );
+        Calendar endDate = new GregorianCalendar(
+                date.get(Calendar.YEAR),
+                date.get(Calendar.MONTH),
+                date.get(Calendar.DAY_OF_MONTH)
+        );
+        endDate.add(Calendar.DATE, 1);
         RealmResults<HistoryLogRealmObject> results = realm.where(HistoryLogRealmObject.class)
                 .equalTo("fullName", fullName)
-                .equalTo("action", action).findAll();
+                .equalTo("action", action)
+                .between("date", startDate.getTime(), endDate.getTime())
+                .findAll();
         return results.size() > 0;
     }
 

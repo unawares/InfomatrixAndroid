@@ -27,6 +27,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.notbytes.barcode_reader.BarcodeReaderActivity;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -268,7 +269,7 @@ public class FoodServiceFragment extends BarcodeReaderActivity.BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("user_body", user);
                 bundle.putParcelable("logs_body", serviceLog);
-                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name())) {
+                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name(), new GregorianCalendar())) {
                     final FoodServiceFragment.FoodServiceBoxFragment foodServiceBoxFragment = new FoodServiceFragment.FoodServiceBoxFragment();
                     foodServiceBoxFragment.setArguments(bundle);
                     foodServiceBoxFragment.setActionsListener(new FoodServiceBoxFragment.ActionsListener() {

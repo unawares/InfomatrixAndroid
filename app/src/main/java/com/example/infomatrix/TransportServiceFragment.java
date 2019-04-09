@@ -26,6 +26,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.notbytes.barcode_reader.BarcodeReaderActivity;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import retrofit2.Call;
@@ -270,7 +271,7 @@ public class TransportServiceFragment extends BarcodeReaderActivity.BaseFragment
                 bundle.putParcelable("user_body", user);
                 bundle.putParcelable("logs_body", serviceLog);
 
-                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name())) {
+                if (!DBManager.getInstance().hadService(user.getFullName(), serviceLog.getAction().name(), new GregorianCalendar())) {
                     final TransportServiceBoxFragment transportServiceBoxFragment = new TransportServiceBoxFragment();
                     transportServiceBoxFragment.setArguments(bundle);
                     transportServiceBoxFragment.setActionsListener(new TransportServiceBoxFragment.ActionsListener() {
