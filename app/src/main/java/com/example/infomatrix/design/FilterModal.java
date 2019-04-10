@@ -38,10 +38,13 @@ public class FilterModal extends ConstraintLayout {
     private boolean check;
 
     private void syncShowButton() {
-        check = true;
+        int counter = 0;
         for (FilterItem filterItem : filterItems) {
-            check = check && !filterItem.isChecked();
+            if (filterItem.isChecked()) {
+                counter += 1;
+            }
         }
+        check = counter <= filterItems.size() / 2;
         showButton.setText(check ? "Show All" : "Hide All");
     }
 
@@ -110,6 +113,7 @@ public class FilterModal extends ConstraintLayout {
                 }
                 ((FiltersAdapter) filtersListView.getAdapter()).notifyDataSetChanged();
                 check = !check;
+                syncShowButton();
             }
 
         });
@@ -167,10 +171,11 @@ public class FilterModal extends ConstraintLayout {
         for (FilterItem filterItem : this.filterItems) {
             filterItem.setChecked(sharedPreferences.getBoolean(filterItem.getKey(), true));
         }
-        filtersListView.setAdapter(new FiltersAdapter(getContext(), R.layout.modal_filter_item, filterItems, new FiltersAdapter.OnCheckedChangeListener() {
+        filtersListView.setAdapter(new FiltersAdapter(getContext(), R.layout.modal_filter_item, filterItems, new FiltersAdapter.OnCheckboxClickListener() {
             @Override
-            public void onCheckedChangeListener(FilterItem filterItem, boolean isChecked) {
+            public void onCheckboxClickListener(FilterItem filterItem, boolean isChecked) {
                 filterItem.setChecked(isChecked);
+                ((FiltersAdapter) filtersListView.getAdapter()).notifyDataSetChanged();
                 syncShowButton();
             }
         }));

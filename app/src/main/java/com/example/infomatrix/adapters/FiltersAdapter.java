@@ -21,15 +21,15 @@ import java.util.List;
 
 public class FiltersAdapter extends BaseAdapter {
 
-    private OnCheckedChangeListener onCheckedChangeListener;
+    private OnCheckboxClickListener onCheckboxClickListener;
 
     private Context context;
     private List<FilterItem> filterItems;
     private int listItemLayoutId;
 
-    public FiltersAdapter(Context context, int layoutId, List<FilterItem> filterItems, OnCheckedChangeListener onCheckedChangeListener) {
+    public FiltersAdapter(Context context, int layoutId, List<FilterItem> filterItems, OnCheckboxClickListener onCheckboxClickListener) {
         this.context = context;
-        this.onCheckedChangeListener = onCheckedChangeListener;
+        this.onCheckboxClickListener = onCheckboxClickListener;
         this.filterItems = filterItems;
         this.listItemLayoutId = layoutId;
     }
@@ -81,7 +81,7 @@ public class FiltersAdapter extends BaseAdapter {
             checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onCheckedChangeListener.onCheckedChangeListener(filterItem, checkbox.isChecked());
+                    onCheckboxClickListener.onCheckboxClickListener(filterItem, checkbox.isChecked());
                 }
             });
         }
@@ -93,9 +93,9 @@ public class FiltersAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
     }
 
-    public interface OnCheckedChangeListener {
+    public interface OnCheckboxClickListener {
 
-        void onCheckedChangeListener(FilterItem filterItem, boolean isChecked);
+        void onCheckboxClickListener(FilterItem filterItem, boolean isChecked);
 
     }
 
