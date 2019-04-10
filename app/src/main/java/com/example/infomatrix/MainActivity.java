@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                     userRealmObject.setFullName(user.getFullName());
                                     userRealmObject.setRole(user.getRole().getIdentifier());
                                     userRealmObject.setFood(user.isFood());
-                                    userRealmObject.setTransport(user.isFood());
+                                    userRealmObject.setTransport(user.isTransport());
                                     userRealmObjects.add(userRealmObject);
                                 }
                                 DBManager

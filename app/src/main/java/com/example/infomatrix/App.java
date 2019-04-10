@@ -17,7 +17,6 @@ public class App extends Application {
         RealmConfiguration mRealmConfiguration = new RealmConfiguration.Builder()
                 .name(DB_NAME)
                 .schemaVersion(SCHEME_VERSION)
-                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.getInstance(mRealmConfiguration);
         Realm.setDefaultConfiguration(mRealmConfiguration);
