@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.infomatrix.HistoryLogsFragment;
 import com.example.infomatrix.UsersFragment;
 import com.example.infomatrix.UsersListFragment;
+import com.example.infomatrix.database.DBManager;
 
 public class UsersPagerAdapter extends FragmentPagerAdapter {
 
@@ -40,4 +41,11 @@ public class UsersPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return SIZE;
     }
+
+    public interface OnFilterClickListener {
+
+        void onFilterClick();
+
+    }
+
 }

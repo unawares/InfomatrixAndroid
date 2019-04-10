@@ -5,6 +5,7 @@ import com.example.infomatrix.api.LogsApi;
 import com.example.infomatrix.api.UsersApi;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -36,6 +37,8 @@ public class NetworkService {
                         return chain.proceed(builder.build());
                     }
                 })
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false);
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

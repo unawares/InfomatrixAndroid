@@ -15,7 +15,19 @@ import com.example.infomatrix.database.DBManager;
 
 public class HistoryLogsFragment extends Fragment {
 
+    private static HistoryLogsFragment instance;
+
+    public static HistoryLogsFragment getInstance() {
+        return instance;
+    }
+
     private RecyclerView historyLogsRecyclerView;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        instance = this;
+    }
 
     @Nullable
     @Override
