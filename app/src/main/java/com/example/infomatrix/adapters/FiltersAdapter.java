@@ -19,7 +19,7 @@ import com.example.infomatrix.models.FilterItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FiltersAdapter extends ArrayAdapter<FilterItem> {
+public class FiltersAdapter extends BaseAdapter {
 
     private OnCheckedChangeListener onCheckedChangeListener;
 
@@ -28,20 +28,18 @@ public class FiltersAdapter extends ArrayAdapter<FilterItem> {
     private int listItemLayoutId;
 
     public FiltersAdapter(Context context, int layoutId, List<FilterItem> filterItems, OnCheckedChangeListener onCheckedChangeListener) {
-        super(context, layoutId, filterItems);
         this.context = context;
         this.onCheckedChangeListener = onCheckedChangeListener;
         this.filterItems = filterItems;
         this.listItemLayoutId = layoutId;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         FilterItem filterItem = getItem(position);
         ViewHolder viewHolder;
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
+            LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(listItemLayoutId, parent, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
@@ -50,6 +48,21 @@ public class FiltersAdapter extends ArrayAdapter<FilterItem> {
         }
         viewHolder.bind(filterItem);
         return convertView;
+    }
+
+    @Override
+    public int getCount() {
+        return filterItems.size();
+    }
+
+    @Override
+    public FilterItem getItem(int position) {
+        return filterItems.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public class ViewHolder {
@@ -65,11 +78,10 @@ public class FiltersAdapter extends ArrayAdapter<FilterItem> {
         public void bind(final FilterItem filterItem) {
             label.setText(filterItem.getLabel());
             checkbox.setChecked(filterItem.isChecked());
-            checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    filterItem.setChecked(isChecked);
-                    onCheckedChangeListener.onCheckedChangeListener(filterItem);
+                public void onClick(View v) {
+                    onCheckedChangeListener.onCheckedChangeListener(filterItem, checkbox.isChecked());
                 }
             });
         }
@@ -83,7 +95,7 @@ public class FiltersAdapter extends ArrayAdapter<FilterItem> {
 
     public interface OnCheckedChangeListener {
 
-        void onCheckedChangeListener(FilterItem filterItem);
+        void onCheckedChangeListener(FilterItem filterItem, boolean isChecked);
 
     }
 

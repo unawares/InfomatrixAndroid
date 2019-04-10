@@ -128,6 +128,7 @@ public class FilterModal extends ConstraintLayout {
         overlay.animate().withStartAction(new Runnable() {
             @Override
             public void run() {
+                setFilterItems();
                 overlay.setVisibility(View.VISIBLE);
             }
         }).setInterpolator(new DecelerateInterpolator()).alpha(0.3f);
@@ -168,7 +169,8 @@ public class FilterModal extends ConstraintLayout {
         }
         filtersListView.setAdapter(new FiltersAdapter(getContext(), R.layout.modal_filter_item, filterItems, new FiltersAdapter.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChangeListener(FilterItem filterItem) {
+            public void onCheckedChangeListener(FilterItem filterItem, boolean isChecked) {
+                filterItem.setChecked(isChecked);
                 syncShowButton();
             }
         }));
